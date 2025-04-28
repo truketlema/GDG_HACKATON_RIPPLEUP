@@ -1,7 +1,8 @@
+import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import AboutUs from "./pages/AboutUs";
+import Home from "./pages/Home.tsx";
+import AboutUs from "./pages/AboutUs.tsx";
 import ContactUs from "./pages/ContactUs";
 import Services from "./pages/Services";
 import SingleService from "./pages/SingleService";
