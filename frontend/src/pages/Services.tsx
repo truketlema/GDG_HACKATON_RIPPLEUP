@@ -11,6 +11,9 @@ const Services: React.FC = () => {
   const packagesPerPage = 9;
   const topRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]); // Triggers on component mount and when ID changes
   // 🔍 Filter packages based on search input
   const filteredPackages = packagesData.filter(
     (pkg) =>

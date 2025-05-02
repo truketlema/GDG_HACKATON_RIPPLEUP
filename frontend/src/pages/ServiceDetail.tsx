@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { packagesData } from "../services/packagesApi";
 import Header from "../components/Header"
@@ -8,6 +8,10 @@ const PackageDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const pkg = packagesData.find((p) => p.id === Number(id));
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]); // Triggers on component mount and when ID changes
 
   if (!pkg) {
     return (

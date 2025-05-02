@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { packagesData } from "../services/packagesApi";
 import ServiceCard from "../components/ServiceCard";
@@ -9,6 +9,10 @@ const CategoryPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [category]); // Triggers on component mount and when ID changes
 
   const categoryPackages = packagesData.filter(
     (pkg) => pkg.category?.toLowerCase() === category?.toLowerCase()
