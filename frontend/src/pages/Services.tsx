@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { packagesData, PackageItem } from "../services/packagesApi";
+import Header from "../components/Header"
 import ServiceCard from "../components/ServiceCard";
 import Pagination from "../components/Pagination";
 import { FiSearch } from "react-icons/fi";
@@ -33,6 +34,8 @@ const Services: React.FC = () => {
   }, [currentPage]);
 
   return (
+    <>
+    <Header/>
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div ref={topRef} />
       
@@ -79,6 +82,7 @@ const Services: React.FC = () => {
         </>
       )}
     </div>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { packagesData } from "../services/packagesApi";
+import Header from "../components/Header"
 import { FiArrowLeft, FiCheck, FiStar, FiClock, FiCalendar } from "react-icons/fi";
 
 const PackageDetail: React.FC = () => {
@@ -27,6 +28,8 @@ const PackageDetail: React.FC = () => {
   }
 
   return (
+    <>
+    <Header/>
     <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fadeIn">
         {/* Back Button */}
@@ -106,6 +109,7 @@ const PackageDetail: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { packagesData } from "../services/packagesApi";
 import ServiceCard from "../components/ServiceCard";
+import Header from "../components/Header"
 import { FiSearch, FiArrowLeft } from "react-icons/fi";
 
 const CategoryPage: React.FC = () => {
@@ -19,6 +20,8 @@ const CategoryPage: React.FC = () => {
   );
 
   return (
+    <>
+    <Header/>
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* 🧭 Styled Back Button to Match PackageDetail Page */}
       <button
@@ -66,6 +69,7 @@ const CategoryPage: React.FC = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
