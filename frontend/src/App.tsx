@@ -6,11 +6,12 @@ import AboutUs from "./pages/AboutUs.tsx";
 import ContactUs from "./pages/ContactUs";
 import Services from "./pages/Services";
 import SingleService from "./pages/SingleService";
-import LogIn from "./pages/LogIn";
+
 import UserProfile from "./pages/UserProfile";
 import Charity from "./pages/Charity";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
+import LogIn from "./pages/Login.tsx";
 function App() {
   return (
     <>
