@@ -11,8 +11,29 @@ const CategoryPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [category]); // Triggers on component mount and when ID changes
+    // Try these solutions (pick one):
+
+    // 1. Basic solution - force immediate scroll
+    window.scrollTo(0, 0);
+
+    // 2. More reliable version with setTimeout
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }, 0);
+
+    // 3. Alternative using document.documentElement
+    document.documentElement.scrollTop = 0;
+
+    // 4. Comprehensive solution covering all browsers
+    const scrollToTop = () => {
+      const c = document.documentElement.scrollTop || document.body.scrollTop;
+      if (c > 0) {
+        window.requestAnimationFrame(scrollToTop);
+        window.scrollTo(0, c - c / 8);
+      }
+    };
+    scrollToTop();
+  }, [category]);  // Triggers on component mount and when ID changes
 
   const categoryPackages = packagesData.filter(
     (pkg) => pkg.category?.toLowerCase() === category?.toLowerCase()
