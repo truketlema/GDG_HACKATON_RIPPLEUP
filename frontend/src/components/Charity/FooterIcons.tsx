@@ -1,9 +1,11 @@
+import React from "react";
 import who from "../../assets/who.png";
 import cross from "../../assets/cross.png";
 import moon from "../../assets/moon.png";
 
-export default function FooterIcons() {
-  const icons = [who, cross, moon, who];
+export default function FooterIcons(): JSX.Element {
+  const icons: string[] = [who, cross, moon, who];
+
   return (
     <div className="flex justify-around items-center border-t py-4">
       {icons.map((icon, i) => (

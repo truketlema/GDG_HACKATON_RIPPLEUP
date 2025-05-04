@@ -1,4 +1,6 @@
-export default function Header() {
+import React from "react";
+
+export default function Header(): JSX.Element {
   return (
     <div className="p-4">
       <nav className="text-sm text-gray-500">Home &gt; Charity</nav>

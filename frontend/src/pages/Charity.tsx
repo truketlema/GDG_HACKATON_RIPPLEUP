@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback, ChangeEvent } from "react";
 import Header from "../components/Charity/Header";
 import Sidebar from "../components/Charity/Sidebar";
 import CharityCard from "../components/Charity/CharityCard";
@@ -8,7 +8,14 @@ import education from "../assets/education.jpg";
 import water from "../assets/water.jpg";
 import DonationModal from "../components/Charity/DonationModal";
 
-const charities = [
+interface CharityItem {
+  title: string;
+  desc: string;
+  img: string;
+  category: string;
+}
+
+const charities: CharityItem[] = [
   {
     title: "End Hunger",
     desc: "Millions of people around the world go to bed hungry every night. This fund supports sustainable solutions to food insecurity, including food distribution programs, agricultural training, and community gardens to help families access nutritious meals every day.",
@@ -29,32 +36,35 @@ const charities = [
   },
 ];
 
-function Charity() {
-  const [charity, setCharity] = useState(charities);
-  const [inputValue, setInputValue] = useState("");
-  const [selectedCharity, setSelectedCharity] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+function Charity(): JSX.Element {
+  const [charity, setCharity] = useState<CharityItem[]>(charities);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [selectedCharity, setSelectedCharity] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
-  const filterCharities = useCallback((search, category) => {
-    let filtered = charities;
+  const filterCharities = useCallback(
+    (search: string, category: string | null) => {
+      let filtered = charities;
 
-    if (search) {
-      filtered = filtered.filter((item) =>
-        item.title.toLowerCase().includes(search.toLowerCase())
-      );
-    }
+      if (search) {
+        filtered = filtered.filter((item) =>
+          item.title.toLowerCase().includes(search.toLowerCase())
+        );
+      }
 
-    if (category) {
-      filtered = filtered.filter((item) => item.category === category);
-    }
+      if (category) {
+        filtered = filtered.filter((item) => item.category === category);
+      }
 
-    setCharity(filtered);
-    setSelectedCharity(null);
-  }, []);
+      setCharity(filtered);
+      setSelectedCharity(null);
+    },
+    []
+  );
 
   const handleCharitySearch = useCallback(
-    (e) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const searchTerm = e.target.value.toLowerCase();
       setInputValue(searchTerm);
       filterCharities(searchTerm, selectedCategory);
@@ -63,7 +73,7 @@ function Charity() {
   );
 
   const handleCategoryFilter = useCallback(
-    (category) => {
+    (category: string) => {
       if (category === "all") {
         setSelectedCategory(null);
         filterCharities(inputValue, null);
@@ -75,7 +85,7 @@ function Charity() {
     [filterCharities, inputValue]
   );
 
-  const handleCharityClick = (title) => {
+  const handleCharityClick = (title: string) => {
     setSelectedCharity(title);
   };
 
@@ -136,9 +146,9 @@ function Charity() {
       </div>
       <FooterIcons />
 
-      {showModal && (
+      {showModal && selectedCharity && (
         <DonationModal
-          charity={charities.find((c) => c.title === selectedCharity)}
+          charity={charities.find((c) => c.title === selectedCharity)!}
           onClose={() => setShowModal(false)}
         />
       )}

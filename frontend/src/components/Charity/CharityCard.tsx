@@ -1,6 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function CharityCard({ title, desc, img }) {
+interface CharityCardProps {
+  title: string;
+  desc: string;
+  img: string;
+}
+
+export default function CharityCard({ title, desc, img }: CharityCardProps) {
   const [showFull, setShowFull] = useState(false);
 
   const toggleDescription = () => {

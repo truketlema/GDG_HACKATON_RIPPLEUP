@@ -1,4 +1,20 @@
-export default function DonationModal({ charity, onClose }) {
+import React from "react";
+
+interface Charity {
+  title: string;
+  desc: string;
+  img: string;
+}
+
+interface DonationModalProps {
+  charity: Charity | null;
+  onClose: () => void;
+}
+
+export default function DonationModal({
+  charity,
+  onClose,
+}: DonationModalProps) {
   if (!charity) return null;
 
   return (

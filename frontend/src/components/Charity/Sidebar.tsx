@@ -1,15 +1,32 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 
-export default function Sidebar({ onCategorySelect, charities }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeCategory, setActiveCategory] = useState(null);
+interface Charity {
+  category: string;
+  [key: string]: any; // allows for additional fields if needed
+}
 
-  // Compute category counts dynamically
-  const categories = useMemo(() => {
-    const counts = charities.reduce((acc, item) => {
+interface Category {
+  name: string;
+  count: number;
+}
+
+interface SidebarProps {
+  charities: Charity[];
+  onCategorySelect: (category: string) => void;
+}
+
+export default function Sidebar({
+  onCategorySelect,
+  charities,
+}: SidebarProps): JSX.Element {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  const categories: Category[] = useMemo(() => {
+    const counts: Record<string, number> = charities.reduce((acc, item) => {
       acc[item.category] = (acc[item.category] || 0) + 1;
       return acc;
-    }, {});
+    }, {} as Record<string, number>);
     return Object.entries(counts).map(([name, count]) => ({ name, count }));
   }, [charities]);
 
@@ -19,7 +36,7 @@ export default function Sidebar({ onCategorySelect, charities }) {
     );
   }, [categories, searchTerm]);
 
-  const handleCategoryClick = (category) => {
+  const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
     onCategorySelect(category);
   };
