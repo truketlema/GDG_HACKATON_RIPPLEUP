@@ -56,10 +56,10 @@ const Header: React.FC = () => {
           {/* Donate Button */}
           <div className="hidden md:block">
             <Link
-              to="/login"
+              to="/donate"
               className="bg-[#fd7e14] hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition duration-300"
             >
-              Login
+              Donate
             </Link>
           </div>
 
@@ -146,11 +146,11 @@ const Header: React.FC = () => {
                 Contact Us
               </Link>
               <Link
-                to="/login"
+                to="/donate"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition duration-300 inline-block text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Login
+                Donate
               </Link>
             </div>
           </div>

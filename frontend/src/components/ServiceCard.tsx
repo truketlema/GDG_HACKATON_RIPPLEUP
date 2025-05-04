@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "../style/package.css"
 
 interface ServiceCardProps {
   id: number;
@@ -50,7 +51,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       className="bg-white rounded-lg overflow-hidden shadow-sm w-full max-w-sm flex flex-col
       transition-all duration-200 ease-in-out
       hover:shadow-md hover:-translate-y-0.5
-      group border border-gray-200"
+      group border border-gray-200
+      autoShow"
     >
       {/* Image with proper aspect ratio and subtle overlay */}
       <div className="relative pt-[60%] overflow-hidden">
@@ -120,7 +122,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           hover:bg-gray-800
           active:scale-98"
         >
-          {context === "marketplace" ? "Explore Options" : "Get Started"}
+          {context === "marketplace" ? "Explore Options" : "Detail"}
         </button>
       </div>
     </div>
