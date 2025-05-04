@@ -11,7 +11,8 @@ import UserProfile from "./pages/UserProfile";
 import Charity from "./pages/Charity";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
-import LogIn from "./pages/Login.tsx";
+import PackageDetail from "./pages/ServiceDetail.tsx";
+import LogIn from "./pages/LogIn.tsx";
 function App() {
   return (
     <>
@@ -20,10 +21,11 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/services/:id" element={<SingleService />} />
+        <Route path="/services/:category" element={<SingleService />} />
+        <Route path="/services/:category/:id" element={<PackageDetail />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/profile" element={<UserProfile id="user001"/>} />
         <Route path="/charity" element={<Charity />} />
 
         <Route path="*" element={<NotFound />} />
