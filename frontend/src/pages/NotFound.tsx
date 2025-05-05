@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom"; // if you're using React Router
 
 export default function NotFound() {
