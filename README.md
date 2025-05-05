@@ -1,54 +1,49 @@
-# React + TypeScript + Vite
+# 💧 RippleUp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**A smart platform for booking and managing service-based packages — powered by AI, loyalty rewards, and community trust.**
 
-Currently, two official plugins are available:
+🚀 Live Demo: [https://rippleup.netlify.app](https://rippleup.netlify.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 📌 Overview
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**RippleUp** is a modern service-booking platform built for customers who need reliable service providers — from home cleaning to tutoring, fitness, and more.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+It’s simple to use, secure, and smart. Customers can book services, earn rewards, and get personalized recommendations thanks to integrated AI.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 👥 For Customers
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- 🔐 **Sign Up / Log In** to start using the platform
+- 🔍 **Browse & filter** services by category, price, popularity, or location
+- 🛍️ **Book service packages** with detailed descriptions
+- 🎁 **Earn Reward Points** with each booking
+- 📢 **Invite friends** and get bonus points
+- 🤖 **Get smart AI recommendations** tailored to your needs and activity
+
+---
+
+## 💡 Key Features
+
+- 🧾 Customer authentication (Sign Up / Log In)
+- 🛍️ Seamless service discovery and booking
+- 🎁 Reward Points system
+- 📢 Invite-a-friend referral rewards
+- 🤖 AI-driven service suggestions
+- ⚡ Clean, responsive, and user-friendly UI
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React, TypeScript, Tailwind CSS
+- **Routing**: React Router DOM
+- **Forms**: React Hook Form
+- **State Management**: Redux Toolkit
+- **Deployment**: Netlify
+
+---
+
+
