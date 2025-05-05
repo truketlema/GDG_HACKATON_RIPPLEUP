@@ -84,11 +84,16 @@ const CharityPage: React.FC = () => {
   const [donationSuccess, setDonationSuccess] = useState(false);
   const [showDonationModal, setShowDonationModal] = useState(false);
   const [totalDonated, setTotalDonated] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Get user points and donation history from localStorage
   useEffect(() => {
+    // Check if user is logged in
+    const authToken = localStorage.getItem("authToken");
     const storedUserData = localStorage.getItem("userData");
-    if (storedUserData) {
+
+    if (authToken && storedUserData) {
+      setIsLoggedIn(true);
       const userData = JSON.parse(storedUserData);
       setUserPoints(userData.points || 0);
 
@@ -102,6 +107,10 @@ const CharityPage: React.FC = () => {
         );
         setTotalDonated(total);
       }
+    } else {
+      setIsLoggedIn(false);
+      setUserPoints(0);
+      setTotalDonated(0);
     }
   }, []);
 
@@ -116,6 +125,17 @@ const CharityPage: React.FC = () => {
   });
 
   const handleDonateClick = (charityId: number) => {
+    if (!isLoggedIn) {
+      if (
+        window.confirm(
+          "You need to be logged in to donate. Would you like to log in now?"
+        )
+      ) {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
     setSelectedCharity(charityId);
     setShowDonationModal(true);
     setDonationAmount(5); // Reset to minimum donation amount
@@ -192,51 +212,78 @@ const CharityPage: React.FC = () => {
           </p>
         </div>
 
-        {/* User Points Display */}
-        <div className="bg-white p-6 rounded-xl shadow-md">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-gray-500 text-sm">YOUR AVAILABLE POINTS</h3>
-              <p className="text-3xl font-bold text-gray-800">
-                {userPoints.toLocaleString()}
-              </p>
-            </div>
-            <div className="w-1/2">
-              <div className="text-right text-sm text-gray-500 mb-1">
-                {Math.round((userPoints / 5000) * 100)}% of monthly goal
+        {/* User Points Display - Only show if logged in */}
+        {isLoggedIn && (
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-gray-500 text-sm">YOUR AVAILABLE POINTS</h3>
+                <p className="text-3xl font-bold text-gray-800">
+                  {userPoints.toLocaleString()}
+                </p>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div
-                  className="bg-orange-500 h-3 rounded-full"
-                  style={{
-                    width: `${Math.min(100, (userPoints / 5000) * 100)}%`,
-                  }}
-                ></div>
+              <div className="w-1/2">
+                <div className="text-right text-sm text-gray-500 mb-1">
+                  {Math.round((userPoints / 5000) * 100)}% of monthly goal
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div
+                    className="bg-orange-500 h-3 rounded-full"
+                    style={{
+                      width: `${Math.min(100, (userPoints / 5000) * 100)}%`,
+                    }}
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Total Donations Display */}
-        <div className="bg-white p-6 rounded-xl shadow-md">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-gray-500 text-sm">TOTAL POINTS DONATED</h3>
-              <p className="text-3xl font-bold text-gray-800">
-                {totalDonated.toLocaleString()}
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                Worth approximately {(totalDonated * 10).toLocaleString()} Birr
-                in charitable impact
-              </p>
-            </div>
-            <div className="bg-orange-50 p-4 rounded-lg">
-              <p className="text-orange-700 font-medium">
-                Thank you for your generosity!
-              </p>
+        {/* Total Donations Display - Only show if logged in */}
+        {isLoggedIn && (
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-gray-500 text-sm">TOTAL POINTS DONATED</h3>
+                <p className="text-3xl font-bold text-gray-800">
+                  {totalDonated.toLocaleString()}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Worth approximately {(totalDonated * 10).toLocaleString()}{" "}
+                  Birr in charitable impact
+                </p>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg">
+                <p className="text-orange-700 font-medium">
+                  Thank you for your generosity!
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Login prompt for non-logged in users */}
+        {!isLoggedIn && (
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-bold text-gray-800">
+                  Sign in to donate your points
+                </h3>
+                <p className="text-gray-600 mt-1">
+                  Log in to your account to see your available points and make
+                  donations to causes you care about.
+                </p>
+              </div>
+              <a
+                href="/login"
+                className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300"
+              >
+                Sign In
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Search and Filter Section */}
         <div className="grid md:grid-cols-4 gap-6">

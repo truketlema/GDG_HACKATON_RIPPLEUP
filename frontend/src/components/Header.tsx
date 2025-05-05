@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -170,7 +168,7 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <Link
-                to="/donate"
+                to="/charity"
                 className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300"
               >
                 Donate
@@ -299,7 +297,7 @@ const Header: React.FC = () => {
                 </>
               ) : (
                 <Link
-                  to="/donate"
+                  to="/charity"
                   className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300 inline-block text-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
