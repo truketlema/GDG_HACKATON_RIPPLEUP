@@ -1,9 +1,25 @@
+"use client";
 import React from "react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
-import orphan from "../assets/orphan.jpg";
 import Footer from "../components/Footer";
+
+// Import your images from the assets folder
+import orphanImage from "../assets/orphan.jpg";
+// Import service images
+import spaImage from "../assets/spa.jpg";
+import hotelImage from "../assets/hotel.jpg";
+import diningImage from "../assets/dining.jpg";
+import adventureImage from "../assets/adventure.jpg";
+import fitnessImage from "../assets/fitness.jpg";
+import eventImage from "../assets/event.jpg";
+// Import news images
+import charityEventImage from "../assets/charity-event.jpg";
+import partnersImage from "../assets/partners.jpg";
+import reportImage from "../assets/report.jpg";
+// Import about image
+import aboutImage from "../assets/about.jpg";
 
 // Custom hook for scroll animations
 const useInView = (options = {}) => {
@@ -11,7 +27,7 @@ const useInView = (options = {}) => {
   const [isInView, setIsInView] = useState(false);
 
   const observerCallback = useCallback(
-    (entries) => {
+    (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         setIsInView(entry.isIntersecting);
       });
@@ -36,7 +52,24 @@ const useInView = (options = {}) => {
   return [ref, isInView];
 };
 
-const ServiceCard = ({ service, index }) => {
+interface Service {
+  title: string;
+  description: string;
+  goal: string;
+  raised: string;
+  percentage: string;
+  donations: string;
+  link: string;
+  image: string;
+}
+
+const ServiceCard = ({
+  service,
+  index,
+}: {
+  service: Service;
+  index: number;
+}) => {
   const [isInView, setIsInView] = useState(false);
   const ref = useRef(null);
 
@@ -71,7 +104,19 @@ const ServiceCard = ({ service, index }) => {
         transition: `all 1000ms ease-out ${index * 150}ms`,
       }}
     >
-      <div className="h-48 bg-gray-300"></div>
+      {/* Replace the placeholder div with an actual image */}
+      <div className="h-48 relative">
+        <img
+          src={service.image || "/placeholder.svg"}
+          alt={service.title}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).onerror = null;
+            (e.target as HTMLImageElement).src =
+              "https://via.placeholder.com/384x192?text=Service+Image";
+          }}
+        />
+      </div>
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
         <p className="text-gray-600 mb-4">{service.description}</p>
@@ -105,7 +150,65 @@ const ServiceCard = ({ service, index }) => {
   );
 };
 
-const Home: React.FC = () => {
+interface News {
+  title: string;
+  description: string;
+  image: string;
+}
+
+const NewsCard = ({ news }: { news: News }) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="bg-white rounded-lg shadow-md overflow-hidden">
+      {/* Replace the placeholder div with an actual image */}
+      <div className="h-48 relative">
+        <img
+          src={news.image || "/placeholder.svg"}
+          alt={news.title}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).onerror = null;
+            (e.target as HTMLImageElement).src =
+              "https://via.placeholder.com/384x192?text=News+Image";
+          }}
+        />
+      </div>
+      <div className="p-6">
+        <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
+        <p className="text-gray-600 mb-4">{news.description}</p>
+        <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+          READ MORE
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Check if user is logged in
@@ -120,7 +223,7 @@ const Home: React.FC = () => {
     }
   }, []);
 
-  // First row of services
+  // First row of services with images
   const firstRowServices = [
     {
       title: "Luxury Spa Retreat",
@@ -129,7 +232,8 @@ const Home: React.FC = () => {
       raised: "8,000",
       percentage: "7",
       donations: "14",
-      link: "/services/spa-retreat",
+      link: "/services/spa",
+      image: spaImage,
     },
     {
       title: "5-Star Hotel Experience",
@@ -138,7 +242,8 @@ const Home: React.FC = () => {
       raised: "12,000",
       percentage: "8",
       donations: "25",
-      link: "/services/hotel-experience",
+      link: "/services/hotels",
+      image: hotelImage,
     },
     {
       title: "Fine Dining Experience",
@@ -147,11 +252,12 @@ const Home: React.FC = () => {
       raised: "80,000",
       percentage: "40",
       donations: "6",
-      link: "/services/dining-experience",
+      link: "/services/restaurants",
+      image: diningImage,
     },
   ];
 
-  // Second row of services
+  // Second row of services with images
   const secondRowServices = [
     {
       title: "Adventure Tour Package",
@@ -160,7 +266,8 @@ const Home: React.FC = () => {
       raised: "32,000",
       percentage: "53",
       donations: "12",
-      link: "/services/adventure-tour",
+      link: "/services/getaways",
+      image: adventureImage,
     },
     {
       title: "Personalized Fitness Package",
@@ -171,6 +278,7 @@ const Home: React.FC = () => {
       percentage: "27",
       donations: "24",
       link: "/services/fitness-package",
+      image: fitnessImage,
     },
     {
       title: "Exclusive Event Hosting",
@@ -181,11 +289,34 @@ const Home: React.FC = () => {
       percentage: "67",
       donations: "8",
       link: "/services/event-hosting",
+      image: eventImage,
+    },
+  ];
+
+  // News items with images
+  const newsItems = [
+    {
+      title: "Latest Charity Event",
+      description:
+        "Ut id velit tempor eu amet nunc. Vestibulum iaculis cras sed odio. A dolor vitae ultrices at maecenas massa urna massa erat.",
+      image: charityEventImage,
+    },
+    {
+      title: "New Service Partners",
+      description:
+        "Enim in lacus pretium phasellus nulla posuere sagittis aliquam maecenas. Tristique amet scelerisque magnis nulla egestas eu magna.",
+      image: partnersImage,
+    },
+    {
+      title: "Impact Report 2025",
+      description:
+        "Placerat volutpat sit sit amet odio sapien volutpat id. Imperdiet pharetra sapien odio dictumst quis mi nunc blandit.",
+      image: reportImage,
     },
   ];
 
   return (
-    <div className=" min-h-screen flex flex-col overflow-hidden">
+    <div className="min-h-screen flex flex-col overflow-hidden">
       <Header />
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-black to-[#3e3b78] text-white py-20 h-screen flex items-center justify-center">
@@ -371,9 +502,14 @@ const Home: React.FC = () => {
 
           <div className="w-full md:w-1/2 h-full">
             <img
-              src={orphan || "/placeholder.svg"}
+              src={orphanImage || "/placeholder.svg"}
               alt="Children being helped"
               className="rounded-xl w-full h-[60vh] object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).onerror = null;
+                (e.target as HTMLImageElement).src =
+                  "https://via.placeholder.com/600x400?text=Children+Being+Helped";
+              }}
             />
           </div>
         </div>
@@ -435,7 +571,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Services Section - UPDATED WITH ZOOM IN EFFECT */}
+      {/* Featured Services Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -493,7 +629,18 @@ const Home: React.FC = () => {
                 Learn more about us
               </Link>
             </div>
-            <div className="bg-gray-300 h-80 rounded-lg"></div>
+            <div className="h-80 rounded-lg overflow-hidden">
+              <img
+                src={aboutImage || "/placeholder.svg"}
+                alt="About RippleUP"
+                className="w-full h-full object-cover rounded-lg"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).onerror = null;
+                  (e.target as HTMLImageElement).src =
+                    "https://via.placeholder.com/600x320?text=About+Us";
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -506,71 +653,14 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Latest Charity Event",
-                description:
-                  "Ut id velit tempor eu amet nunc. Vestibulum iaculis cras sed odio. A dolor vitae ultrices at maecenas massa urna massa erat.",
-              },
-              {
-                title: "New Service Partners",
-                description:
-                  "Enim in lacus pretium phasellus nulla posuere sagittis aliquam maecenas. Tristique amet scelerisque magnis nulla egestas eu magna.",
-              },
-              {
-                title: "Impact Report 2025",
-                description:
-                  "Placerat volutpat sit sit amet odio sapien volutpat id. Imperdiet pharetra sapien odio dictumst quis mi nunc blandit.",
-              },
-            ].map((news, index) => {
-              return <NewsCard key={index} news={news} />;
-            })}
+            {newsItems.map((news, index) => (
+              <NewsCard key={index} news={news} />
+            ))}
           </div>
         </div>
       </section>
       <div className="mt-auto">
-        {" "}
         <Footer />
-      </div>
-    </div>
-  );
-};
-
-const NewsCard = ({ news }) => {
-  const [isInView, setIsInView] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsInView(entry.isIntersecting);
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
-  }, []);
-
-  return (
-    <div ref={ref} className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="h-48 bg-gray-300"></div>
-      <div className="p-6">
-        <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
-        <p className="text-gray-600 mb-4">{news.description}</p>
-        <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
-          READ MORE
-          <span>→</span>
-        </button>
       </div>
     </div>
   );

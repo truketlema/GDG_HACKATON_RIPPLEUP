@@ -11,7 +11,6 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 
 // Import image used only below the form
-import image from "../assets/Img.png";
 
 // Import header and footer components
 import Header from "../components/Header";
@@ -206,13 +205,6 @@ const ContactPage: React.FC = () => {
             </button>
           </form>
         </div>
-
-        {/* Banner Image */}
-        <img
-          src={image}
-          alt="Descriptive Alt Text"
-          className="w-[1080px] h-[380px] rounded-[20px] object-cover mt-32 mx-auto"
-        />
 
         {/* FAQ Section */}
         <div className="max-w-[1440px] mx-auto pt-[120px] px-[72px] pb-[120px] space-y-[40px]">
