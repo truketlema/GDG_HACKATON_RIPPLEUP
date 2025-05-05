@@ -61,3 +61,29 @@ class PackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
         fields = ['id', 'title', 'description', 'goal', 'image', 'category', 'price', 'details', 'features', 'star']
+
+class UserDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    role = serializers.SerializerMethodField()
+    points = serializers.SerializerMethodField()
+    business_name = serializers.SerializerMethodField()
+    website = serializers.SerializerMethodField()
+
+    def get_role(self, user):
+        if hasattr(user, 'customer'):
+            return 'customer'
+        elif hasattr(user, 'business'):
+            return 'business'
+        return 'unknown'
+
+    def get_points(self, user):
+        return user.customer.points if hasattr(user, 'customer') else None
+
+    def get_business_name(self, user):
+        return user.business.business_name if hasattr(user, 'business') else None
+
+    def get_website(self, user):
+        return user.business.website if hasattr(user, 'business') else None
