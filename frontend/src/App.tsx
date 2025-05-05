@@ -25,7 +25,7 @@ function App() {
         <Route path="/services/:category/:id" element={<PackageDetail />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/profile/:userId" element={<UserProfile />} />
         <Route path="/charity" element={<Charity />} />
 
         <Route path="*" element={<NotFound />} />

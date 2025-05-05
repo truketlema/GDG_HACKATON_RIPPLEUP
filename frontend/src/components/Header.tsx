@@ -1,13 +1,56 @@
 import React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Check authentication status on component mount
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const authToken = localStorage.getItem("authToken");
+      const storedUserData = localStorage.getItem("userData");
+
+      if (authToken && storedUserData) {
+        setIsLoggedIn(true);
+        setUserData(JSON.parse(storedUserData));
+      } else {
+        setIsLoggedIn(false);
+        setUserData(null);
+      }
+    };
+
+    checkAuthStatus();
+
+    // Add event listener for storage changes (in case user logs in/out in another tab)
+    window.addEventListener("storage", checkAuthStatus);
+
+    return () => {
+      window.removeEventListener("storage", checkAuthStatus);
+    };
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userId");
+    setIsLoggedIn(false);
+    setUserData(null);
+    setIsProfileDropdownOpen(false);
+    navigate("/");
   };
 
   return (
@@ -16,7 +59,7 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex flex-row gap-1">
-            <img src={logo} alt="" />
+            <img src={logo || "/placeholder.svg"} alt="" />
             <Link to="/" className="text-xl font-bold">
               RippleUp
             </Link>
@@ -53,21 +96,75 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Donate Button */}
+          {/* Donate Button or Profile Button based on login status */}
           <div className="hidden md:block">
-            <Link
-              to="/donate"
-              className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300"
-            >
-              Donate
-            </Link>
+            {isLoggedIn ? (
+              <div className="relative">
+                <button
+                  onClick={toggleProfileDropdown}
+                  className="flex items-center space-x-2 bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-4 py-2 rounded-full font-medium transition duration-300"
+                >
+                  <span>{userData?.fullName?.split(" ")[0] || "Profile"}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-4 w-4 transition-transform ${
+                      isProfileDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Profile Dropdown */}
+                {isProfileDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <Link
+                      to={`/profile/${userData?.id}`}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsProfileDropdownOpen(false)}
+                    >
+                      View Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex space-x-4">
+                <Link
+                  to="/login"
+                  className="text-white hover:text-[#fd7e14] font-medium transition duration-300"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/donate"
+                  className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300"
+                >
+                  Donate
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               type="button"
-              className="text-gray-700 hover:text-blue-600"
+              className="text-gray-400 hover:text-white"
               onClick={toggleMenu}
               aria-label="Toggle menu"
             >
@@ -108,50 +205,81 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div className="md:hidden py-4 border-t border-gray-700">
             <div className="flex flex-col space-y-4">
               <Link
                 to="/"
-                className="text-gray-700 hover:text-[#fd7e14] font-medium"
+                className="text-gray-400 hover:text-white font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </Link>
               <Link
                 to="/services"
-                className="text-gray-700 hover:text-[#fd7e14] font-medium"
+                className="text-gray-400 hover:text-white font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Services
               </Link>
               <Link
                 to="/charity"
-                className="text-gray-700 hover:text-[#fd7e14] font-medium"
+                className="text-gray-400 hover:text-white font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Charity
               </Link>
               <Link
                 to="/about"
-                className="text-gray-700 hover:text-[#fd7e14] font-medium"
+                className="text-gray-400 hover:text-white font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About Us
               </Link>
               <Link
                 to="/contact"
-                className="text-gray-700 hover:text-[#fd7e14] font-medium"
+                className="text-gray-400 hover:text-white font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact Us
               </Link>
-              <Link
-                to="/donate"
-                className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300 inline-block text-center"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Donate
-              </Link>
+
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    to={`/profile/${userData?.id}`}
+                    className="text-gray-400 hover:text-white font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="text-red-400 hover:text-red-300 font-medium text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-gray-400 hover:text-white font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/donate"
+                    className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300 inline-block text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Donate
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
