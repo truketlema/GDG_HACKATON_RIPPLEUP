@@ -1,12 +1,42 @@
 import React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import book from "../assets/book.png";
-import earn from "../assets/earn.png";
-import donate from "../assets/donate.png";
 import Header from "../components/Header";
-import listen from "../assets/listen.png";
-import orphange from "../assets/orphange.jpg";
+import orphan from "../assets/orphan.jpg";
+
 const Home: React.FC = () => {
+  // Custom hook for scroll animations
+  const useInView = (
+    options = {}
+  ): [React.RefObject<HTMLDivElement>, boolean] => {
+    const [isInView, setIsInView] = useState(false);
+    const ref = useRef<HTMLDivElement | null>(null);
+
+    const observerCallback = useCallback(
+      (entries: IntersectionObserverEntry[]) => {
+        const [entry] = entries;
+        setIsInView(entry.isIntersecting);
+      },
+      [setIsInView]
+    );
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(observerCallback, options);
+
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+
+      return () => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      };
+    }, [ref, options, observerCallback]);
+
+    return [ref as React.RefObject<HTMLDivElement>, isInView];
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -59,93 +89,144 @@ const Home: React.FC = () => {
 
       {/* Process Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
-            <div className="text-center max-w-xs">
-              <div className="w-16 h-16 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                <img src={book} alt="" />
+        <div className="flex flex-col md:flex-row justify-center gap-8 mt-12">
+          {[
+            {
+              icon: (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              ),
+              title: "Book",
+              desc: "Discover amazing services",
+              color: "text-blue-500",
+            },
+            {
+              icon: (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 2v14"></path>
+                  <path d="M5 10l7 7 7-7"></path>
+                  <circle cx="12" cy="21" r="1"></circle>
+                </svg>
+              ),
+              title: "Earn",
+              desc: "Get rewards for booking",
+              color: "text-green-500",
+            },
+            {
+              icon: (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                  <rect x="2" y="7" width="20" height="5"></rect>
+                  <line x1="12" y1="22" x2="12" y2="7"></line>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
+              ),
+              title: "Donate",
+              desc: "Support causes you care about",
+              color: "text-orange-500",
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 w-full md:w-1/4 text-center group"
+            >
+              <div
+                className={`${item.color} mb-4 w-16 h-16 mx-auto group-hover:scale-110 transition-transform`}
+              >
+                {item.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-2">Book</h3>
-              <p className="text-gray-600">
-                Book your favorite services with ease
-              </p>
+              <h3 className="font-bold text-xl mb-3">{item.title}</h3>
+              <p className="text-gray-500">{item.desc}</p>
             </div>
-            <div className="text-center max-w-xs">
-              <div className="w-16 h-16 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                <img src={earn} alt="" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Earn</h3>
-              <p className="text-gray-600">Earn rewards with every booking</p>
-            </div>
-            <div className="text-center max-w-xs">
-              <div className="w-16 h-16  text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                <img src={donate} alt="" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Donate</h3>
-              <p className="text-gray-600">
-                Donate points to make a difference
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Donation Process Section */}
-      <section className="py-16 bg-gray-50 flex flex-row h-screen">
-        <div className="container px-4 w-1/2">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              Donate Points. Change Lives.
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Turn your reward points into a force for good. Donate them to
-              charity and help make a real difference in someone's life.
-            </p>
-          </div>
+      {/* Donation Process Section  */}
+      <section className="py-16 bg-gray-50 flex flex-col md:flex-row items-center">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row">
+          <div className="w-full md:w-1/2 pr-0 md:pr-8 mb-8 md:mb-0 ">
+            <div className="text-left mb-8">
+              <h2 className="text-3xl md:text-2xl lg:text-3xl font-bold mb-4">
+                Donate Points. Change Lives.
+              </h2>
+              <p className="text-lg md:text-sm lg:text-lg text-gray-600">
+                Turn your reward points into a force for good. Donate them to
+                charity and help make a real difference in someone's life.
+              </p>
+            </div>
 
-          <div className=" gap-6">
-            <div className="flex flex-row ">
-              <div>
-                <div className="bg-white p-6 rounded-lg flex flex-row text-center items-center gap-2">
-                  <p className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold  ">
-                    1
-                  </p>
-                  <h3 className="font-semibold mb-2 items-center text-center">
-                    Sign up on our website
-                  </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                  1
                 </div>
-                <div className="bg-white p-6 rounded-lg text-center  flex flex-row items-center gap-2">
-                  <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold ">
-                    2
-                  </div>
-                  <h3 className="font-semibold mb-2">
-                    {" "}
-                    Choose Where to donate
-                  </h3>
-                </div>
+                <h3 className="font-semibold">Sign up on our website</h3>
               </div>
-              <div>
-                {" "}
-                <div className="bg-white p-6 rounded-lg text-center  flex flex-row items-center gap-2">
-                  <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold ">
-                    3
-                  </div>
-                  <h3 className="font-semibold mb-2">
-                    Donate the amount you like
-                  </h3>
+
+              <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                  2
                 </div>
-                <div className="bg-white p-6 rounded-lg  text-center flex flex-row items-center gap-2">
-                  <div className="w-8 h-8  bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold ">
-                    4
-                  </div>
-                  <h3 className="font-semibold mb-2">Stay tuned</h3>
+                <h3 className="font-semibold">Choose where to donate</h3>
+              </div>
+
+              <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                  3
                 </div>
+                <h3 className="font-semibold">Donate the amount you like</h3>
+              </div>
+
+              <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                  4
+                </div>
+                <h3 className="font-semibold">Stay tuned</h3>
               </div>
             </div>
           </div>
-        </div>
-        <div className="w-1/2 ">
-          <img src={orphange} alt="" className="rounded-xl" />
+
+          <div className="w-full md:w-1/2 h-full">
+            <img
+              src={orphan || "/placeholder.svg"}
+              alt="Children being helped"
+              className="rounded-xl w-full h-[60vh] object-cover"
+            />
+          </div>
         </div>
       </section>
 
@@ -166,12 +247,10 @@ const Home: React.FC = () => {
                 Every booking earns you points you can redeem, share, or donate
                 to meaningful causes that change lives.
               </p>
-              <Link
-                to="/services"
-                className="text-black font-medium hover:underline"
-              >
-                Read more
-              </Link>
+              <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+                READ MORE
+                <span>→</span>
+              </button>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <p className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold  "></p>
@@ -183,12 +262,10 @@ const Home: React.FC = () => {
                 Every booking earns you points you can redeem, share, or donate
                 to meaningful causes that change lives.
               </p>
-              <Link
-                to="/rewards"
-                className="text-black font-medium hover:underline"
-              >
-                Read more
-              </Link>
+              <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+                READ MORE
+                <span>→</span>
+              </button>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <p className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold  "></p>
@@ -200,18 +277,16 @@ const Home: React.FC = () => {
                 Our AI tracks your preferences and booking history to suggest
                 experiences you'll love — tailored just for you.
               </p>
-              <Link
-                to="/recommendations"
-                className="text-black font-medium hover:underline"
-              >
-                Read more
-              </Link>
+              <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+                READ MORE
+                <span>→</span>
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Services Section */}
+      {/* Featured Services Section - CHANGED TO ZOOM OUT EFFECT */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -223,226 +298,169 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  Luxury Spa Retreat
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Relax and rejuvenate with our premium spa treatments
-                </p>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      Goal: ETB 120,000
-                    </span>
-                    <span className="text-sm font-medium">
-                      Raised: ETB 8,000
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-[#fd7e14] h-2 rounded-full"
-                      style={{ width: "7%" }}
-                    ></div>
-                  </div>
-                  <div className="mt-1 text-sm text-gray-500">14 donations</div>
-                </div>
-                <Link
-                  to="/services/spa-retreat"
-                  className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
+            {[
+              {
+                title: "Luxury Spa Retreat",
+                description:
+                  "Relax and rejuvenate with our premium spa treatments",
+                goal: "120,000",
+                raised: "8,000",
+                percentage: "7",
+                donations: "14",
+                link: "/services/spa-retreat",
+              },
+              {
+                title: "5-Star Hotel Experience",
+                description:
+                  "Enjoy a luxurious stay with world-class amenities",
+                goal: "150,000",
+                raised: "12,000",
+                percentage: "8",
+                donations: "25",
+                link: "/services/hotel-experience",
+              },
+              {
+                title: "Fine Dining Experience",
+                description:
+                  "Embark on an exciting journey through scenic landscapes",
+                goal: "200,000",
+                raised: "80,000",
+                percentage: "40",
+                donations: "6",
+                link: "/services/dining-experience",
+              },
+            ].map((service, index) => {
+              const [elementRef, isInView] = useInView({ threshold: 0.1 });
+              return (
+                <div
+                  key={index}
+                  ref={elementRef}
+                  className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-1000 transform ${
+                    isInView ? "opacity-100 scale-100" : "opacity-0 scale-125"
+                  }`}
+                  style={{ transitionDelay: `${index * 200}ms` }}
                 >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  5-Star Hotel Experience
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Enjoy a luxurious stay with world-class amenities
-                </p>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      Goal: ETB 150,000
-                    </span>
-                    <span className="text-sm font-medium">
-                      Raised: ETB 12,000
-                    </span>
+                  <div className="h-48 bg-gray-300"></div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4">{service.description}</p>
+                    <div className="mb-4">
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm font-medium">
+                          Goal: ETB {service.goal}
+                        </span>
+                        <span className="text-sm font-medium">
+                          Raised: ETB {service.raised}
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-[#fd7e14] h-2 rounded-full"
+                          style={{ width: `${service.percentage}%` }}
+                        ></div>
+                      </div>
+                      <div className="mt-1 text-sm text-gray-500">
+                        {service.donations} donations
+                      </div>
+                    </div>
+                    <Link
+                      to={service.link}
+                      className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
+                    >
+                      View Details
+                    </Link>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-[#fd7e14] h-2 rounded-full"
-                      style={{ width: "8%" }}
-                    ></div>
-                  </div>
-                  <div className="mt-1 text-sm text-gray-500">25 donations</div>
                 </div>
-                <Link
-                  to="/services/hotel-experience"
-                  className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  Fine Dining Experience
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Embark on an exciting journey through scenic landscapes
-                </p>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      Goal: ETB 200,000
-                    </span>
-                    <span className="text-sm font-medium">
-                      Raised: ETB 80,000
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-[#fd7e14] h-2 rounded-full"
-                      style={{ width: "40%" }}
-                    ></div>
-                  </div>
-                  <div className="mt-1 text-sm text-gray-500">6 donations</div>
-                </div>
-                <Link
-                  to="/services/dining-experience"
-                  className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  Adventure Tour Package
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Embark on an exciting journey through scenic landscapes
-                </p>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      Goal: ETB 60,000
-                    </span>
-                    <span className="text-sm font-medium">
-                      Raised: ETB 32,000
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-[#fd7e14]  h-2 rounded-full"
-                      style={{ width: "53%" }}
-                    ></div>
-                  </div>
-                  <div className="mt-1 text-sm text-gray-500">12 donations</div>
-                </div>
-                <Link
-                  to="/services/adventure-tour"
-                  className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
+            {[
+              {
+                title: "Adventure Tour Package",
+                description:
+                  "Embark on an exciting journey through scenic landscapes",
+                goal: "60,000",
+                raised: "32,000",
+                percentage: "53",
+                donations: "12",
+                link: "/services/adventure-tour",
+              },
+              {
+                title: "Personalized Fitness Package",
+                description:
+                  "Achieve your fitness goals with tailor-made workout plans and personal training sessions.",
+                goal: "220,000",
+                raised: "60,000",
+                percentage: "27",
+                donations: "24",
+                link: "/services/fitness-package",
+              },
+              {
+                title: "Exclusive Event Hosting",
+                description:
+                  "Plan your dream event with our event hosting services. From weddings to corporate meetings, we provide venues, catering, and event management tailored to your needs.",
+                goal: "120,000",
+                raised: "80,000",
+                percentage: "67",
+                donations: "8",
+                link: "/services/event-hosting",
+              },
+            ].map((service, index) => {
+              const [ref, isInView] = useInView({ threshold: 0.1 });
+              return (
+                <div
+                  key={index}
+                  ref={ref}
+                  className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-1000 transform ${
+                    isInView ? "opacity-100 scale-100" : "opacity-0 scale-125"
+                  }`}
+                  style={{ transitionDelay: `${index * 200}ms` }}
                 >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  Personalized Fitness Package
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Achieve your fitness goals with tailor-made workout plans and
-                  personal training sessions.
-                </p>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      Goal: ETB 220,000
-                    </span>
-                    <span className="text-sm font-medium">
-                      Raised: ETB 60,000
-                    </span>
+                  <div className="h-48 bg-gray-300"></div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4">{service.description}</p>
+                    <div className="mb-4">
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm font-medium">
+                          Goal: ETB {service.goal}
+                        </span>
+                        <span className="text-sm font-medium">
+                          Raised: ETB {service.raised}
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-[#fd7e14] h-2 rounded-full"
+                          style={{ width: `${service.percentage}%` }}
+                        ></div>
+                      </div>
+                      <div className="mt-1 text-sm text-gray-500">
+                        {service.donations} donations
+                      </div>
+                    </div>
+                    <Link
+                      to={service.link}
+                      className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
+                    >
+                      View Details
+                    </Link>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-[#fd7e14]  h-2 rounded-full"
-                      style={{ width: "27%" }}
-                    ></div>
-                  </div>
-                  <div className="mt-1 text-sm text-gray-500">24 donations</div>
                 </div>
-                <Link
-                  to="/services/fitness-package"
-                  className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  Exclusive Event Hosting
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Plan your dream event with our event hosting services. From
-                  weddings to corporate meetings, we provide venues, catering,
-                  and event management tailored to your needs.
-                </p>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      Goal: ETB 120,000
-                    </span>
-                    <span className="text-sm font-medium">
-                      Raised: ETB 80,000
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-[#fd7e14]  h-2 rounded-full"
-                      style={{ width: "67%" }}
-                    ></div>
-                  </div>
-                  <div className="mt-1 text-sm text-gray-500">8 donations</div>
-                </div>
-                <Link
-                  to="/services/event-hosting"
-                  className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
-          <div className="text-center items-center  flex  justify-center">
+          <div className="text-center items-center flex justify-center">
             <Link
               to="/services"
-              className="block text-center text-black py-2 rounded-md hover:text-white w-64 border-[1px] hover:bg-[#fd7e14]  border-[#fd7e14] duration-300 transition transform "
+              className="block text-center text-black py-2 rounded-md hover:text-white w-64 border-[1px] hover:bg-[#fd7e14] border-[#fd7e14] duration-300 transition transform"
             >
               View All Services
             </Link>
@@ -487,64 +505,47 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  Latest Charity Event
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Ut id velit tempor eu amet nunc. Vestibulum iaculis cras sed
-                  odio. A dolor vitae ultrices at maecenas massa urna massa
-                  erat.
-                </p>
-                <Link
-                  to="/news/charity-event"
-                  className="text-black font-medium hover:underline"
+            {[
+              {
+                title: "Latest Charity Event",
+                description:
+                  "Ut id velit tempor eu amet nunc. Vestibulum iaculis cras sed odio. A dolor vitae ultrices at maecenas massa urna massa erat.",
+              },
+              {
+                title: "New Service Partners",
+                description:
+                  "Enim in lacus pretium phasellus nulla posuere sagittis aliquam maecenas. Tristique amet scelerisque magnis nulla egestas eu magna.",
+              },
+              {
+                title: "Impact Report 2025",
+                description:
+                  "Placerat volutpat sit sit amet odio sapien volutpat id. Imperdiet pharetra sapien odio dictumst quis mi nunc blandit.",
+              },
+            ].map((news, index) => {
+              const [ref, isInView] = useInView({ threshold: 0.1 });
+              return (
+                <div
+                  key={index}
+                  ref={ref}
+                  className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-1000 transform ${
+                    isInView
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10"
+                  }`}
+                  style={{ transitionDelay: `${index * 200}ms` }}
                 >
-                  Read more
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  New Service Partners
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Enim in lacus pretium phasellus nulla posuere sagittis aliquam
-                  maecenas. Tristique amet scelerisque magnis nulla egestas eu
-                  magna.
-                </p>
-                <Link
-                  to="/news/service-partners"
-                  className="text-black font-medium hover:underline"
-                >
-                  Read more
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  Impact Report 2025
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Placerat volutpat sit sit amet odio sapien volutpat id.
-                  Imperdiet pharetra sapien odio dictumst quis mi nunc blandit.
-                </p>
-                <Link
-                  to="/news/impact-report"
-                  className="text-black font-medium hover:underline"
-                >
-                  Read more
-                </Link>
-              </div>
-            </div>
+                  <div className="h-48 bg-gray-300"></div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
+                    <p className="text-gray-600 mb-4">{news.description}</p>
+                    <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+                      READ MORE
+                      <span>→</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
