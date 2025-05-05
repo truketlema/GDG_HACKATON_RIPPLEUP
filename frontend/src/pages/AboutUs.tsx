@@ -105,7 +105,7 @@ const AboutUsPage: React.FC = () => {
         </section>
 
         {/* About Section */}
-        <section className="flex gap-16 max-auto items-center max-w-6xl">
+        <section className="flex flex-col md:flex-row gap-16 max-auto items-center max-w-6xl">
           <div className="space-y-8">
             <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
               <h3 className="text-2xl font-bold mb-3 flex items-center gap-3 text-orange-500">
@@ -179,7 +179,7 @@ const AboutUsPage: React.FC = () => {
             These extraordinary individuals and organizations have made
             significant contributions to our cause.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-80">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:h-80">
             {[
               {
                 name: "Brycen Gregory",
@@ -201,7 +201,7 @@ const AboutUsPage: React.FC = () => {
                 key={id}
                 className="bg-white h-full rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
-                <div className="h-60
+                <div className="md:h-60
                  overflow-hidden">
                   <img
                     src={person.img}
