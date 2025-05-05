@@ -7,8 +7,8 @@ import {
   FiClock,
   FiFacebook,
   FiInstagram,
-  FiTwitter,
 } from "react-icons/fi";
+import { FaXTwitter } from "react-icons/fa6";
 
 // Import image used only below the form
 import image from "../assets/Img.png";
@@ -17,7 +17,7 @@ import image from "../assets/Img.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const ContactPage1: React.FC = () => {
+const ContactPage: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
@@ -102,8 +102,9 @@ const ContactPage1: React.FC = () => {
               </div>
             </div>
 
+            {/* ✅ Updated Social Icons */}
             <div className="flex gap-3">
-              {[FiFacebook, FiTwitter, FiInstagram].map((Icon, i) => (
+              {[FiFacebook, FaXTwitter, FiInstagram].map((Icon, i) => (
                 <button
                   key={i}
                   className="bg-white text-black rounded-full w-6 h-6 flex items-center justify-center p-1 hover:text-orange-600"
@@ -279,4 +280,4 @@ const ContactPage1: React.FC = () => {
   );
 };
 
-export default ContactPage1;
+export default ContactPage;
