@@ -53,7 +53,6 @@ const ContactPage: React.FC = () => {
       <Header />
 
       <section className="py-12 px-4">
-
         {/* Heading */}
         <h1 className="text-[52px] md:text-[50px] font-bold mb-6 w-full px-4 mr-[100px] text-center">
           We’d Love to Hear from You!
