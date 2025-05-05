@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { FiPlus, FiX } from "react-icons/fi";
+import {
+  FiPlus,
+  FiX,
+  FiPhone,
+  FiMail,
+  FiClock,
+  FiFacebook,
+  FiInstagram,
+  FiTwitter,
+} from "react-icons/fi";
 
-// Import your assets
-import phone from "../assets/phone.png";
-import email from "../assets/email.png";
-import clock from "../assets/clock.png";
-import facebook from "../assets/Facebook_black.png";
-import x from "../assets/X.png";
-import instagram from "../assets/Instagram_black.png";
+// Import image used only below the form
 import image from "../assets/Img.png";
 
 // Import header and footer components
@@ -82,33 +85,30 @@ const ContactPage1: React.FC = () => {
                 Esteros facilisi aenean n...
               </p>
             </div>
+
             <div className="space-y-5 text-sm">
               <p className="font-bold">Address: Addis Ababa Ethiopia.</p>
               <div className="flex items-center gap-2">
-                <img src={phone} alt="Phone" className="h-5 w-5" />
+                <FiPhone className="h-5 w-5 text-orange-500 hover:text-orange-600 transition-colors duration-200" />
                 <span>(251) 366-7883</span>
               </div>
               <div className="flex items-center gap-2">
-                <img src={email} alt="Email" className="h-5 w-5" />
+                <FiMail className="h-5 w-5 text-orange-500 hover:text-orange-600 transition-colors duration-200" />
                 <span>RippleUp@email.net</span>
               </div>
               <div className="flex items-center gap-2">
-                <img src={clock} alt="Clock" className="h-5 w-5" />
+                <FiClock className="h-5 w-5 text-orange-500 hover:text-orange-600 transition-colors duration-200" />
                 <span>24 hour service</span>
               </div>
             </div>
 
             <div className="flex gap-3">
-              {[facebook, x, instagram].map((icon, i) => (
+              {[FiFacebook, FiTwitter, FiInstagram].map((Icon, i) => (
                 <button
                   key={i}
-                  className="bg-white text-black rounded-full w-6 h-6 flex items-center justify-center p-1"
+                  className="bg-white text-black rounded-full w-6 h-6 flex items-center justify-center p-1 hover:text-orange-600"
                 >
-                  <img
-                    src={icon}
-                    alt={`Social Icon ${i}`}
-                    className="w-full h-full object-contain"
-                  />
+                  <Icon className="w-full h-full" />
                 </button>
               ))}
             </div>
