@@ -4,6 +4,7 @@ import Header from "../components/Header"
 import ServiceCard from "../components/ServiceCard";
 import Pagination from "../components/Pagination";
 import { FiSearch } from "react-icons/fi";
+import Footer from "../components/Footer";
 
 const Services: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -44,7 +45,6 @@ const Services: React.FC = () => {
       
       {/* 👇 Centered header texts */}
       <div className="text-center mb-8">
-        <div className="text-sm text-gray-400 mb-2">Home {">"} Services</div>
         <h1 className="text-3xl font-bold mb-2">Services Marketplace</h1>
         <p className="text-gray-500">Discover and book premium services</p>
       </div>
@@ -85,6 +85,7 @@ const Services: React.FC = () => {
         </>
       )}
     </div>
+    <Footer/>
     </>
   );
 };

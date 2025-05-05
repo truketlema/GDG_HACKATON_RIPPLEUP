@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "../components/Header"
+import Footer from "../components/Footer";
 
 const categories = [
   { name: "All", icon: "🌍" },
@@ -102,12 +103,6 @@ const CharityPage: React.FC = () => {
     <>
     <Header/>
     <div className="px-6 md:px-20 py-10 space-y-10 bg-gray-50 min-h-screen">
-      {/* Breadcrumb */}
-      <div className="text-sm text-gray-500 flex items-center space-x-2">
-        <span className="hover:text-orange-500 cursor-pointer">Home</span>
-        <span>&gt;</span>
-        <span className="text-gray-500">Charity</span>
-      </div>
 
       {/* Hero Section */}
       <div className="text-center py-8">
@@ -335,6 +330,7 @@ const CharityPage: React.FC = () => {
         </div>
       </div>
     </div>
+    <Footer/>
     </>
   );
 };

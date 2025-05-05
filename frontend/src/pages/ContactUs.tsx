@@ -1,125 +1,277 @@
-import React from "react";
-import {FiPhone, FiMail, FiClock } from "react-icons/fi";
-import Header from "../components/Header";
+import React, { useState } from "react";
+import {
+  FiPlus,
+  FiX,
+  FiPhone,
+  FiMail,
+  FiClock,
+  FiFacebook,
+  FiInstagram,
+} from "react-icons/fi";
+import { FaXTwitter } from "react-icons/fa6";
 
-const ContactUs: React.FC = () => {
+// Import image used only below the form
+import image from "../assets/Img.png";
+
+// Import header and footer components
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+const ContactPage: React.FC = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      question: "How does the platform work?",
+      answer:
+        "You can browse a variety of services, book your experiences, and earn reward points. These points can be used for future bookings, donated to charity, or shared with friends.",
+    },
+    {
+      question: "How can I earn reward points?",
+      answer:
+        "You earn points by completing tasks, participating in events, or referring friends to the platform.",
+    },
+    {
+      question: "Is my personal data safe on this platform?",
+      answer:
+        "Yes. Your data is encrypted and stored securely. We never share it without your consent.",
+    },
+    {
+      question: "Can businesses join the platform?",
+      answer:
+        "Absolutely. Businesses can join to offer services, support causes, and earn rewards for community engagement.",
+    },
+    {
+      question: "How do I use my points for a booking?",
+      answer:
+        "While booking a service, you’ll have the option to pay with reward points at checkout.",
+    },
+  ];
+
   return (
     <>
-    <Header/>
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      {/* Breadcrumb & Title */}
-      <div className="text-center mb-12">
-        <p className="text-sm text-gray-500 mb-2">Home {">"} Contact Us</p>
-        <h1 className="text-4xl font-bold mb-4">We’d Love to Hear from You!</h1>
-        <p className="text-gray-600 max-w-xl mx-auto">
-          Lorem ipsum dolor sit amet et ulla egestas. Ut ac mattis sem et
-          suspendisse vitae vel nulla eleifend.
+      <Header />
+
+      <section className="py-12 px-4">
+
+        {/* Heading */}
+        <h1 className="text-[52px] md:text-[50px] font-bold mb-6 w-full px-4 mr-[100px] text-center">
+          We’d Love to Hear from You!
+        </h1>
+
+        {/* Description */}
+        <p className="text-center text-gray-600 mb-6 mx-auto leading-relaxed w-[695px] h-[54px] overflow-hidden">
+          Libero dictum ut purus ut vel sit egestas. Ut ac mattis senectus ac
+          suspendisse vitae vel nulla eleifend. Est eros facilisi aenean nisl a.
+          Vitae et fusce purus consectetur.
         </p>
-      </div>
 
-      {/* Main Contact Section */}
-      <div className="grid md:grid-cols-2 gap-8 bg-white rounded-xl shadow-md p-8">
-        {/* Contact Info Block */}
-        <div className="bg-black text-white rounded-xl p-6 flex flex-col justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Book, donate hope.</h2>
-            <p className="text-gray-400 mb-6">
-              Ut ac mattis sem et suspendisse vitae vel nulla eleifend.
-            </p>
-
-            <div className="mb-4">
-              <p className="font-semibold">Address: Addis Ababa, Ethiopia</p>
+        {/* Contact Grid */}
+        <div className="flex max-w-[1100px] mx-auto mt-16">
+          {/* Contact Info */}
+          <div className="w-[360px] h-[534px] bg-black text-white p-[32px] rounded-tl-[20px] rounded-bl-[20px] flex flex-col justify-between">
+            <div>
+              <h3 className="text-[28px] font-bold leading-tight mb-8">
+                Book, donate <br /> hope.
+              </h3>
+              <p className="text-sm text-gray-250">
+                Ut ac mattis senectus ac suspendisse vitae vel nulla eleifend.
+                Esteros facilisi aenean n...
+              </p>
             </div>
 
-            <div className="flex items-center mb-2 gap-2">
-              <FiPhone className="text-orange-500" />
-              <span>(251) 960-7983</span>
+            <div className="space-y-5 text-sm">
+              <p className="font-bold">Address: Addis Ababa Ethiopia.</p>
+              <div className="flex items-center gap-2">
+                <FiPhone className="h-5 w-5 text-orange-500 hover:text-orange-600 transition-colors duration-200" />
+                <span>(251) 366-7883</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FiMail className="h-5 w-5 text-orange-500 hover:text-orange-600 transition-colors duration-200" />
+                <span>RippleUp@email.net</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FiClock className="h-5 w-5 text-orange-500 hover:text-orange-600 transition-colors duration-200" />
+                <span>24 hour service</span>
+              </div>
             </div>
 
-            <div className="flex items-center mb-2 gap-2">
-              <FiMail className="text-orange-500" />
-              <span>RippleUp@email.net</span>
-            </div>
-
-            <div className="flex items-center mb-6 gap-2">
-              <FiClock className="text-orange-500" />
-              <span>24 hour service</span>
+            {/* ✅ Updated Social Icons */}
+            <div className="flex gap-3">
+              {[FiFacebook, FaXTwitter, FiInstagram].map((Icon, i) => (
+                <button
+                  key={i}
+                  className="bg-white text-black rounded-full w-6 h-6 flex items-center justify-center p-1 hover:text-orange-600"
+                >
+                  <Icon className="w-full h-full" />
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex gap-4 mt-4">
-            <a href="#" className="text-white hover:text-orange-500">
-              <i className="fab fa-facebook-f" />
-            </a>
-            <a href="#" className="text-white hover:text-orange-500">
-              <i className="fab fa-twitter" />
-            </a>
-            <a href="#" className="text-white hover:text-orange-500">
-              <i className="fab fa-instagram" />
-            </a>
-          </div>
+          {/* Contact Form */}
+          <form className="w-[700px] h-[534px] bg-gray-50 p-[24px] rounded-tr-[20px] rounded-br-[20px] flex flex-col justify-between gap-[16px]">
+            <div className="grid grid-cols-2 gap-[16px]">
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="firstName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  First Name
+                </label>
+                <input
+                  id="firstName"
+                  type="text"
+                  placeholder="First Name"
+                  className="w-full h-[45px] px-[20px] py-[4px] rounded-[14px] border text-sm"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="lastName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Last Name
+                </label>
+                <input
+                  id="lastName"
+                  type="text"
+                  placeholder="Last Name"
+                  className="w-full h-[45px] px-[20px] py-[4px] rounded-[14px] border text-sm"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="Email Address"
+                  className="w-full h-[45px] px-[20px] py-[4px] rounded-[14px] border text-sm"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="phone"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Phone Number
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  placeholder="Phone Number"
+                  className="w-full h-[45px] px-[20px] py-[4px] rounded-[14px] border text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="subject"
+                className="text-sm font-medium text-gray-700"
+              >
+                Subject
+              </label>
+              <input
+                id="subject"
+                type="text"
+                placeholder="Subject"
+                className="w-full h-[45px] px-[20px] py-[4px] rounded-[14px] border text-sm"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="message"
+                className="text-sm font-medium text-gray-700"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                placeholder="Message"
+                className="w-full h-[100px] px-[20px] py-[4px] rounded-[14px] border resize-none text-sm"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              className="w-[240px] h-[45px] px-[24px] py-[4px] bg-orange-500 hover:bg-orange-600 text-white rounded-[14px] font-semibold text-sm"
+            >
+              SEND MESSAGE
+            </button>
+          </form>
         </div>
 
-        {/* Contact Form */}
-        <form className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="First Name"
-              className="w-full border border-gray-300 rounded-md px-4 py-2"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Last Name"
-              className="w-full border border-gray-300 rounded-md px-4 py-2"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email Address"
-              className="w-full border border-gray-300 rounded-md px-4 py-2"
-              required
-            />
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              className="w-full border border-gray-300 rounded-md px-4 py-2"
-            />
-          </div>
-          <input
-            type="text"
-            placeholder="Subject"
-            className="w-full border border-gray-300 rounded-md px-4 py-2"
-            required
-          />
-          <textarea
-            rows={4}
-            placeholder="Message"
-            className="w-full border border-gray-300 rounded-md px-4 py-2"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md font-semibold transition"
-          >
-            SEND MESSAGE
-          </button>
-        </form>
-      </div>
+        {/* Banner Image */}
+        <img
+          src={image}
+          alt="Descriptive Alt Text"
+          className="w-[1080px] h-[380px] rounded-[20px] object-cover mt-32 mx-auto"
+        />
 
-      {/* Optional Map or Visual */}
-      <div className="h-48 md:h-64 mt-12 rounded-xl overflow-hidden shadow-lg">
-  <img
-    src="https://i.ytimg.com/vi/ZLEjCAovEkk/sddefault.jpg"
-    alt="Contact us visual"
-    className="w-full h-full object-cover"
-  />
-</div>
-    </div>
+        {/* FAQ Section */}
+        <div className="max-w-[1440px] mx-auto pt-[120px] px-[72px] pb-[120px] space-y-[40px]">
+          <div className="flex flex-col md:flex-row gap-[40px]">
+            <div className="w-full md:max-w-[416px] h-[288px]">
+              <h3 className="text-3xl font-bold leading-snug">
+                <span className="block">Frequently</span>
+                <span className="block">Asked</span>
+                <span className="block">Questions</span>
+              </h3>
+              <p className="text-sm mt-10 max-w-[220px]">
+                At eu lobortis pretium tincidunt amet lacus ut aenean aliquet
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-[40px] w-full md:max-w-[800px]">
+              {faqs.map((faq, idx) => (
+                <div key={idx}>
+                  {idx === openIndex ? (
+                    <div className="bg-gray-100 rounded-[16px] p-6 border border-gray-200">
+                      <div
+                        className="flex justify-between items-start cursor-pointer"
+                        onClick={() => setOpenIndex(null)}
+                      >
+                        <h4 className="text-lg font-semibold leading-6 max-w-[80%]">
+                          {faq.question}
+                        </h4>
+                        <div className="w-8 h-8 rounded-full border border-black flex items-center justify-center">
+                          <FiX className="text-orange-500 text-base" />
+                        </div>
+                      </div>
+                      <p className="text-sm mt-4 text-black leading-6">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ) : (
+                    <div
+                      className="flex justify-between items-start pb-6 border-b border-gray-200 cursor-pointer"
+                      onClick={() => setOpenIndex(idx)}
+                    >
+                      <h4 className="text-lg font-semibold leading-6 max-w-[80%]">
+                        {faq.question}
+                      </h4>
+                      <div className="w-8 h-8 rounded-full border border-black flex items-center justify-center">
+                        <FiPlus className="text-black text-base" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </>
   );
 };
 
-export default ContactUs;
+export default ContactPage;

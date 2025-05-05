@@ -4,6 +4,7 @@ import { packagesData } from "../services/packagesApi";
 import ServiceCard from "../components/ServiceCard";
 import Header from "../components/Header"
 import { FiSearch, FiArrowLeft } from "react-icons/fi";
+import Footer from "../components/Footer";
 
 const CategoryPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
@@ -94,6 +95,7 @@ const CategoryPage: React.FC = () => {
         </div>
       )}
     </div>
+    <Footer/>
     </>
   );
 };
