@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const AboutUsPage: React.FC = () => {
   return (
@@ -339,6 +340,7 @@ const AboutUsPage: React.FC = () => {
           </div>
         </section>
       </div>
+      <Footer />
     </>
   );
 };
