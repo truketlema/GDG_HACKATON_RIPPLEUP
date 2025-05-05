@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import orphan from "../assets/orphan.jpg";
+import Footer from "../components/Footer";
 
 // Custom hook for scroll animations
 const useInView = (options = {}) => {
@@ -170,7 +171,7 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className=" min-h-screen flex flex-col overflow-hidden">
       <Header />
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-black to-[#3e3b78] text-white py-20 h-screen flex items-center justify-center">
@@ -550,6 +551,10 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+      <div className="mt-auto">
+        {" "}
+        <Footer />
+      </div>
     </div>
   );
 };
