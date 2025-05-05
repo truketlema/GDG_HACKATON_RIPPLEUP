@@ -101,7 +101,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             <div className="flex justify-between items-center pt-2 border-t border-gray-100 mt-2">
               {price !== undefined && (
                 <div className="text-base font-semibold text-gray-900 tracking-tight">
-                  ${price.toLocaleString()}<span className="text-xs text-gray-400">~</span>
+                  ETB{price.toLocaleString()}<span className="text-xs text-gray-400">~</span>
               <span className="text-xs text-gray-500">
                 {goal.toLocaleString()} points
               </span>

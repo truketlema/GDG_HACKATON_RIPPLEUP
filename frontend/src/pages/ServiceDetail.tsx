@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { packagesData } from "../services/packagesApi";
 import Header from "../components/Header";
@@ -13,7 +13,9 @@ import {
   FiUser,
   FiMail,
   FiPhone,
+  FiChevronDown,
 } from "react-icons/fi";
+import Footer from "../components/Footer";
 
 const PackageDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,13 +38,31 @@ const PackageDetail: React.FC = () => {
     bankName: "",
     accountNumber: "",
     routingNumber: "",
-    // PayPal just needs email which we already have
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showPaymentDropdown, setShowPaymentDropdown] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
+
+  // Close modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setIsBookingModalOpen(false);
+      }
+    };
+
+    if (isBookingModalOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isBookingModalOpen]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -77,6 +97,14 @@ const PackageDetail: React.FC = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const selectPaymentMethod = (method: string) => {
+    setFormData({
+      ...formData,
+      paymentMethod: method,
+    });
+    setShowPaymentDropdown(false);
   };
 
   const validateForm = () => {
@@ -294,7 +322,10 @@ const PackageDetail: React.FC = () => {
       {/* Booking Modal */}
       {isBookingModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div 
+            ref={modalRef}
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          >
             <div className="p-8">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-3xl font-bold text-gray-900">
@@ -438,55 +469,77 @@ const PackageDetail: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Payment Method */}
+                  {/* Payment Method Dropdown */}
                   <div className="bg-gray-50 p-6 rounded-xl">
                     <h3 className="text-xl font-semibold mb-4 flex items-center">
                       <FiCreditCard className="mr-2 text-orange-500" />
                       Payment Method
                     </h3>
-                    <div className="space-y-3">
-                      <label className="flex items-center space-x-3 p-4 border border-gray-300 rounded-lg hover:border-orange-400 cursor-pointer transition-colors duration-200">
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="credit"
-                          checked={formData.paymentMethod === "credit"}
-                          onChange={handleInputChange}
-                          className="h-5 w-5 text-orange-500 focus:ring-orange-500"
-                        />
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setShowPaymentDropdown(!showPaymentDropdown)}
+                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      >
                         <div className="flex items-center">
-                          <FiCreditCard className="text-gray-700 mr-2" />
-                          <span className="text-gray-700">Credit Card</span>
+                          {formData.paymentMethod === "credit" && (
+                            <>
+                              <FiCreditCard className="text-gray-700 mr-2" />
+                              <span>Credit Card</span>
+                            </>
+                          )}
+                          {formData.paymentMethod === "paypal" && (
+                            <>
+                              <FiDollarSign className="text-gray-700 mr-2" />
+                              <span>PayPal</span>
+                            </>
+                          )}
+                          {formData.paymentMethod === "bank" && (
+                            <>
+                              <FiDollarSign className="text-gray-700 mr-2" />
+                              <span>Bank Transfer</span>
+                            </>
+                          )}
                         </div>
-                      </label>
-                      <label className="flex items-center space-x-3 p-4 border border-gray-300 rounded-lg hover:border-orange-400 cursor-pointer transition-colors duration-200">
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="paypal"
-                          checked={formData.paymentMethod === "paypal"}
-                          onChange={handleInputChange}
-                          className="h-5 w-5 text-orange-500 focus:ring-orange-500"
-                        />
-                        <div className="flex items-center">
-                          <FiDollarSign className="text-gray-700 mr-2" />
-                          <span className="text-gray-700">PayPal</span>
+                        <FiChevronDown className={`transition-transform ${showPaymentDropdown ? "transform rotate-180" : ""}`} />
+                      </button>
+                      
+                      {showPaymentDropdown && (
+                        <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+                          <ul>
+                            <li>
+                              <button
+                                type="button"
+                                onClick={() => selectPaymentMethod("credit")}
+                                className="w-full px-4 py-3 text-left hover:bg-gray-100 flex items-center"
+                              >
+                                <FiCreditCard className="text-gray-700 mr-2" />
+                                <span>Credit Card</span>
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                type="button"
+                                onClick={() => selectPaymentMethod("paypal")}
+                                className="w-full px-4 py-3 text-left hover:bg-gray-100 flex items-center"
+                              >
+                                <FiDollarSign className="text-gray-700 mr-2" />
+                                <span>PayPal</span>
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                type="button"
+                                onClick={() => selectPaymentMethod("bank")}
+                                className="w-full px-4 py-3 text-left hover:bg-gray-100 flex items-center"
+                              >
+                                <FiDollarSign className="text-gray-700 mr-2" />
+                                <span>Bank Transfer</span>
+                              </button>
+                            </li>
+                          </ul>
                         </div>
-                      </label>
-                      <label className="flex items-center space-x-3 p-4 border border-gray-300 rounded-lg hover:border-orange-400 cursor-pointer transition-colors duration-200">
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="bank"
-                          checked={formData.paymentMethod === "bank"}
-                          onChange={handleInputChange}
-                          className="h-5 w-5 text-orange-500 focus:ring-orange-500"
-                        />
-                        <div className="flex items-center">
-                          <FiDollarSign className="text-gray-700 mr-2" />
-                          <span className="text-gray-700">Bank Transfer</span>
-                        </div>
-                      </label>
+                      )}
                     </div>
                   </div>
 
@@ -758,6 +811,7 @@ const PackageDetail: React.FC = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </>
   );
 };

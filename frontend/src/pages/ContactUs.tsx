@@ -53,12 +53,6 @@ const ContactPage: React.FC = () => {
       <Header />
 
       <section className="py-12 px-4">
-        {/* Breadcrumb */}
-        <div className="flex w-[154px] h-[19px] gap-[4px] justify-center items-center text-sm text-gray-500 mt-1 mb-5 mx-auto">
-          <span>Home</span>
-          <span>›</span>
-          <span className="font-semibold text-black">Contact Us</span>
-        </div>
 
         {/* Heading */}
         <h1 className="text-[52px] md:text-[50px] font-bold mb-6 w-full px-4 mr-[100px] text-center">
