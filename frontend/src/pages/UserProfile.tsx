@@ -205,18 +205,6 @@ const UserProfile: React.FC = () => {
   };
 
   // Get package details for a booking
-  const getPackageDetails = (packageId: number) => {
-    return (
-      packagesData.find((pkg) => pkg.id === packageId) || {
-        id: 0,
-        title: "Unknown Package",
-        description: "Package details not found",
-        price: 0,
-        image: "/placeholder.svg?height=400&width=600",
-        category: "unknown",
-      }
-    );
-  };
 
   // Format date for display
   const formatDate = (dateString: string) => {

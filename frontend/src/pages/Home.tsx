@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -22,35 +21,6 @@ import reportImage from "../assets/report.jpg";
 import aboutImage from "../assets/about.jpg";
 
 // Custom hook for scroll animations
-const useInView = (options = {}) => {
-  const ref = useRef(null);
-  const [isInView, setIsInView] = useState(false);
-
-  const observerCallback = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        setIsInView(entry.isIntersecting);
-      });
-    },
-    [setIsInView]
-  );
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(observerCallback, options);
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
-  }, [ref, options, observerCallback]);
-
-  return [ref, isInView];
-};
 
 interface Service {
   title: string;
@@ -157,7 +127,7 @@ interface News {
 }
 
 const NewsCard = ({ news }: { news: News }) => {
-  const [isInView, setIsInView] = useState(false);
+  const [, setIsInView] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {

@@ -20,21 +20,21 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-  
+
     // Password match check
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-  
+
     // Business validation
     if (role === "business" && (!businessDocs || !certificate)) {
       setError("Please upload required business documents");
       return;
     }
-  
+
     setIsLoading(true);
-  
+
     try {
       const formData = new FormData();
       formData.append("first_name", firstName);
@@ -42,26 +42,28 @@ export default function SignUp() {
       formData.append("email", email);
       formData.append("password", password);
       formData.append("role", role);
-  
+
       if (role === "business") {
         formData.append("business_name", businessName);
         if (website) formData.append("website", website);
         if (businessDocs) formData.append("business_docs", businessDocs);
         if (certificate) formData.append("certificate", certificate);
       }
-  
+
       const response = await fetch("http://127.0.0.1:8000/signup/", {
         method: "POST",
         body: formData,
       });
-  
+
       const data = await response.json();
-  
+
       // Check for both response.ok and successful data
       if (!response.ok || !data.token) {
-        throw new Error(data.detail || data.message || "Signup failed. Please try again.");
+        throw new Error(
+          data.detail || data.message || "Signup failed. Please try again."
+        );
       }
-  
+
       if (role === "business") {
         // Clear any previous errors before showing success modal
         setError("");
@@ -76,7 +78,11 @@ export default function SignUp() {
     } catch (err) {
       // Only show error if it's not a successful business submission
       if (!showVerificationModal) {
-        setError(err.message || "An error occurred during signup");
+        if (err instanceof Error) {
+          setError(err.message || "An error occurred during signup");
+        } else {
+          setError("An error occurred during signup");
+        }
       }
       console.error("Signup error:", err);
     } finally {
