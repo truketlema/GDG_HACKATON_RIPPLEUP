@@ -2,12 +2,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import SignupSerializer
-from .models import Customer, Business
+from .serializers import SignupSerializer,UserSerializer,PackageSerializer
+from .models import Package
 from drf_spectacular.utils import extend_schema
-from .serializers import UserSerializer
-from rest_framework.generics import GenericAPIView
-from django.contrib.auth import authenticate 
+from rest_framework.generics import GenericAPIView,ListAPIView,RetrieveAPIView
+from django.contrib.auth import authenticate
+from rest_framework.permissions import IsAuthenticated
 class SignupCreateAPIView(APIView):
     @extend_schema(
         request=SignupSerializer,
@@ -68,3 +68,14 @@ class LoginAPIView(GenericAPIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
+
+class PackageListView(ListAPIView):
+    queryset = Package.objects.all()
+    serializer_class = PackageSerializer
+    permission_classes = [IsAuthenticated]
+
+class PackageDetailView(RetrieveAPIView):
+    queryset = Package.objects.all()
+    serializer_class = PackageSerializer
+    lookup_field = 'id'
+    permission_classes = [IsAuthenticated]
