@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer"
 
 const AboutUsPage: React.FC = () => {
   return (
@@ -105,7 +105,7 @@ const AboutUsPage: React.FC = () => {
         </section>
 
         {/* About Section */}
-        <section className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+        <section className="flex gap-16 max-auto items-center max-w-6xl">
           <div className="space-y-8">
             <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
               <h3 className="text-2xl font-bold mb-3 flex items-center gap-3 text-orange-500">
@@ -154,15 +154,15 @@ const AboutUsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative h-96">
-            <div className="absolute w-3/4 h-3/4 left-0 top-0 rounded-2xl overflow-hidden shadow-xl">
+          <div className="flex h-full gap-4">
+            <div className="w-full h-96 rounded-2xl overflow-hidden shadow-xl">
               <img
                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
                 alt="Team working together"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute w-3/4 h-3/4 right-0 bottom-0 rounded-2xl overflow-hidden shadow-xl">
+            <div className="w-full h-96 rounded-2xl overflow-hidden shadow-xl">
               <img
                 src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
                 alt="Happy customers"
@@ -179,7 +179,7 @@ const AboutUsPage: React.FC = () => {
             These extraordinary individuals and organizations have made
             significant contributions to our cause.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-96">
             {[
               {
                 name: "Brycen Gregory",
@@ -189,26 +189,27 @@ const AboutUsPage: React.FC = () => {
               {
                 name: "Aisha Johnson",
                 role: "Community Leader",
-                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1",
               },
               {
                 name: "Marcus Chen",
                 role: "Corporate Partner",
-                img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1",
               },
             ].map((person, id) => (
               <div
                 key={id}
-                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="bg-white h-full rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
-                <div className="h-48 overflow-hidden">
+                <div className="h-full
+                 overflow-hidden">
                   <img
                     src={person.img}
                     alt={person.name}
-                    className="w-full h-full object-cover"
+                    className="w-full object-cover object-top"
                   />
                 </div>
-                <div className="p-6">
+                <div className="p-6 h-20">
                   <h4 className="font-bold text-xl">{person.name}</h4>
                   <p className="text-orange-500 mb-4">{person.role}</p>
                   <div className="flex justify-center gap-4 text-gray-400">
@@ -297,17 +298,17 @@ const AboutUsPage: React.FC = () => {
               {
                 date: "March 30, 2025",
                 title: "Redefining Customer Service Excellence",
-                img: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                img: "https://images.unsplash.com/photo-1552664730-d307ca884978",
               },
               {
                 date: "April 24, 2025",
                 title: "Spotlight on Our Partner Charities",
-                img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf",
               },
               {
                 date: "March 24, 2025",
                 title: "Addressing the Childcare Crisis",
-                img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1",
               },
             ].map((post, idx) => (
               <div
@@ -340,7 +341,7 @@ const AboutUsPage: React.FC = () => {
           </div>
         </section>
       </div>
-      <Footer />
+      <Footer/>
     </>
   );
 };
