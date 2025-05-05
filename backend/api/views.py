@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import SignupSerializer,UserSerializer,PackageSerializer
+from .serializers import SignupSerializer,UserSerializer,PackageSerializer,UserDetailSerializer
 from .models import Package
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import GenericAPIView,ListAPIView,RetrieveAPIView
@@ -60,7 +60,7 @@ class LoginAPIView(GenericAPIView):
             "token": access_token,
             "id": str(user.id),
             "role": 'business' if hasattr(user, 'business') else 'customer',
-            "fullName": f"{user.first_name} {user.last_name}",
+            "full_name": f"{user.first_name} {user.last_name}",
             "email": user.email,
             "points": getattr(user.customer, 'points', 0) if hasattr(user, 'customer') else 0,
             "business_name": getattr(user.business, 'business_name', '') if hasattr(user, 'business') else '',
@@ -79,3 +79,9 @@ class PackageDetailView(RetrieveAPIView):
     serializer_class = PackageSerializer
     lookup_field = 'id'
     permission_classes = [IsAuthenticated]
+
+class UserDetailAPIView(RetrieveAPIView):
+    serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        return self.request.user
