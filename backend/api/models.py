@@ -8,7 +8,6 @@ class User(AbstractUser):
 
     
 class Business(models.Model):
-    full_name = models.CharField(max_length=100)
     business_name = models.CharField(max_length=150)
     website = models.URLField(null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='business')
@@ -17,12 +16,11 @@ class Business(models.Model):
         return self.business_name
 
 class Customer(models.Model):
-    full_name = models.CharField(max_length=100)
     points = models.IntegerField(null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
 
     def __str__(self):
-        return self.full_name
+        return self.user.first_name + ' ' + self.user.last_name
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
