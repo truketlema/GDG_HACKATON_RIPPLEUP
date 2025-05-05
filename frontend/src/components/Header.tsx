@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -53,6 +55,16 @@ const Header: React.FC = () => {
     navigate("/");
   };
 
+  // Function to get user initials for the profile avatar
+  const getUserInitials = () => {
+    if (!userData?.fullName) return "U";
+    const nameParts = userData.fullName.split(" ");
+    if (nameParts.length === 1) return nameParts[0].charAt(0).toUpperCase();
+    return (
+      nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)
+    ).toUpperCase();
+  };
+
   return (
     <header className="bg-black shadow-sm sticky top-0 z-50 text-white">
       <div className="container mx-auto px-4">
@@ -102,25 +114,39 @@ const Header: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={toggleProfileDropdown}
-                  className="flex items-center space-x-2 bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-4 py-2 rounded-full font-medium transition duration-300"
+                  className="flex items-center space-x-2 text-white font-medium transition duration-300"
                 >
-                  <span>{userData?.fullName?.split(" ")[0] || "Profile"}</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`h-4 w-4 transition-transform ${
-                      isProfileDropdownOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+                  <div className="flex items-center">
+                    {userData?.profileImage ? (
+                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#fd7e14]">
+                        <img
+                          src={userData.profileImage || "/placeholder.svg"}
+                          alt="Profile"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-[#fd7e14] flex items-center justify-center text-white font-medium">
+                        {getUserInitials()}
+                      </div>
+                    )}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={`h-4 w-4 ml-2 transition-transform ${
+                        isProfileDropdownOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
                 </button>
 
                 {/* Profile Dropdown */}
@@ -143,25 +169,34 @@ const Header: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="flex space-x-4">
-                <Link
-                  to="/login"
-                  className="text-white hover:text-[#fd7e14] font-medium transition duration-300"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/donate"
-                  className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300"
-                >
-                  Donate
-                </Link>
-              </div>
+              <Link
+                to="/donate"
+                className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300"
+              >
+                Donate
+              </Link>
             )}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
+            {isLoggedIn ? (
+              <button onClick={toggleProfileDropdown} className="mr-4">
+                {userData?.profileImage ? (
+                  <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#fd7e14]">
+                    <img
+                      src={userData.profileImage || "/placeholder.svg"}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-[#fd7e14] flex items-center justify-center text-white text-sm font-medium">
+                    {getUserInitials()}
+                  </div>
+                )}
+              </button>
+            ) : null}
             <button
               type="button"
               className="text-gray-400 hover:text-white"
@@ -263,23 +298,38 @@ const Header: React.FC = () => {
                   </button>
                 </>
               ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="text-gray-400 hover:text-white font-medium"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/donate"
-                    className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300 inline-block text-center"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Donate
-                  </Link>
-                </>
+                <Link
+                  to="/donate"
+                  className="bg-[#fd7e14] hover:bg-[#fc9d50] text-white px-6 py-2 rounded-full font-medium transition duration-300 inline-block text-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Donate
+                </Link>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Profile Dropdown */}
+        {isProfileDropdownOpen && isLoggedIn && (
+          <div className="md:hidden py-4 border-t border-gray-700">
+            <div className="flex flex-col space-y-4">
+              <Link
+                to={`/profile/${userData?.id}`}
+                className="text-gray-400 hover:text-white font-medium"
+                onClick={() => setIsProfileDropdownOpen(false)}
+              >
+                View Profile
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsProfileDropdownOpen(false);
+                }}
+                className="text-red-400 hover:text-red-300 font-medium text-left"
+              >
+                Logout
+              </button>
             </div>
           </div>
         )}
