@@ -1,41 +1,173 @@
 import React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import orphan from "../assets/orphan.jpg";
 
-const Home: React.FC = () => {
-  // Custom hook for scroll animations
-  const useInView = (
-    options = {}
-  ): [React.RefObject<HTMLDivElement>, boolean] => {
-    const [isInView, setIsInView] = useState(false);
-    const ref = useRef<HTMLDivElement | null>(null);
+// Custom hook for scroll animations
+const useInView = (options = {}) => {
+  const ref = useRef(null);
+  const [isInView, setIsInView] = useState(false);
 
-    const observerCallback = useCallback(
-      (entries: IntersectionObserverEntry[]) => {
-        const [entry] = entries;
+  const observerCallback = useCallback(
+    (entries) => {
+      entries.forEach((entry) => {
         setIsInView(entry.isIntersecting);
+      });
+    },
+    [setIsInView]
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(observerCallback, options);
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [ref, options, observerCallback]);
+
+  return [ref, isInView];
+};
+
+const ServiceCard = ({ service, index }) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting);
+        });
       },
-      [setIsInView]
+      { threshold: 0.1 }
     );
 
-    useEffect(() => {
-      const observer = new IntersectionObserver(observerCallback, options);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
 
+    return () => {
       if (ref.current) {
-        observer.observe(ref.current);
+        observer.unobserve(ref.current);
       }
+    };
+  }, []);
 
-      return () => {
-        if (ref.current) {
-          observer.unobserve(ref.current);
-        }
-      };
-    }, [ref, options, observerCallback]);
+  return (
+    <div
+      ref={ref}
+      className="bg-white rounded-lg shadow-md overflow-hidden"
+      style={{
+        transform: isInView ? "scale(1)" : "scale(0.95)",
+        opacity: isInView ? 1 : 0.8,
+        transition: `all 1000ms ease-out ${index * 150}ms`,
+      }}
+    >
+      <div className="h-48 bg-gray-300"></div>
+      <div className="p-6">
+        <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
+        <p className="text-gray-600 mb-4">{service.description}</p>
+        <div className="mb-4">
+          <div className="flex justify-between mb-1">
+            <span className="text-sm font-medium">
+              Goal: ETB {service.goal}
+            </span>
+            <span className="text-sm font-medium">
+              Raised: ETB {service.raised}
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-[#fd7e14] h-2 rounded-full"
+              style={{ width: `${service.percentage}%` }}
+            ></div>
+          </div>
+          <div className="mt-1 text-sm text-gray-500">
+            {service.donations} donations
+          </div>
+        </div>
+        <Link
+          to={service.link}
+          className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
+        >
+          View Details
+        </Link>
+      </div>
+    </div>
+  );
+};
 
-    return [ref as React.RefObject<HTMLDivElement>, isInView];
-  };
+const Home: React.FC = () => {
+  // First row of services
+  const firstRowServices = [
+    {
+      title: "Luxury Spa Retreat",
+      description: "Relax and rejuvenate with our premium spa treatments",
+      goal: "120,000",
+      raised: "8,000",
+      percentage: "7",
+      donations: "14",
+      link: "/services/spa-retreat",
+    },
+    {
+      title: "5-Star Hotel Experience",
+      description: "Enjoy a luxurious stay with world-class amenities",
+      goal: "150,000",
+      raised: "12,000",
+      percentage: "8",
+      donations: "25",
+      link: "/services/hotel-experience",
+    },
+    {
+      title: "Fine Dining Experience",
+      description: "Embark on an exciting journey through scenic landscapes",
+      goal: "200,000",
+      raised: "80,000",
+      percentage: "40",
+      donations: "6",
+      link: "/services/dining-experience",
+    },
+  ];
+
+  // Second row of services
+  const secondRowServices = [
+    {
+      title: "Adventure Tour Package",
+      description: "Embark on an exciting journey through scenic landscapes",
+      goal: "60,000",
+      raised: "32,000",
+      percentage: "53",
+      donations: "12",
+      link: "/services/adventure-tour",
+    },
+    {
+      title: "Personalized Fitness Package",
+      description:
+        "Achieve your fitness goals with tailor-made workout plans and personal training sessions.",
+      goal: "220,000",
+      raised: "60,000",
+      percentage: "27",
+      donations: "24",
+      link: "/services/fitness-package",
+    },
+    {
+      title: "Exclusive Event Hosting",
+      description:
+        "Plan your dream event with our event hosting services. From weddings to corporate meetings, we provide venues, catering, and event management tailored to your needs.",
+      goal: "120,000",
+      raised: "80,000",
+      percentage: "67",
+      donations: "8",
+      link: "/services/event-hosting",
+    },
+  ];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -175,12 +307,12 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Donation Process Section  */}
+      {/* Donation Process Section */}
       <section className="py-16 bg-gray-50 flex flex-col md:flex-row items-center">
         <div className="container mx-auto px-4 flex flex-col md:flex-row">
-          <div className="w-full md:w-1/2 pr-0 md:pr-8 mb-8 md:mb-0 ">
+          <div className="w-full md:w-1/2 pr-0 md:pr-8 mb-8 md:mb-0">
             <div className="text-left mb-8">
-              <h2 className="text-3xl md:text-2xl lg:text-3xl font-bold mb-4">
+              <h2 className="text-3xl font-bold mb-4 md:text-2xl lg:text-3xl">
                 Donate Points. Change Lives.
               </h2>
               <p className="text-lg md:text-sm lg:text-lg text-gray-600">
@@ -191,28 +323,28 @@ const Home: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-lg lg:text-xl font-bold flex-shrink-0">
                   1
                 </div>
                 <h3 className="font-semibold">Sign up on our website</h3>
               </div>
 
               <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center  text-lg lg:text-xl font-bold flex-shrink-0">
                   2
                 </div>
                 <h3 className="font-semibold">Choose where to donate</h3>
               </div>
 
               <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-lg lg:text-xl font-bold flex-shrink-0">
                   3
                 </div>
-                <h3 className="font-semibold">Donate the amount you like</h3>
+                <h3 className="font-semibold  ">Donate the amount you like</h3>
               </div>
 
               <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-xl font-bold flex-shrink-0">
+                <div className="w-8 h-8 bg-[#fd7e14] text-white rounded-full flex items-center justify-center text-lg lg:text-xl font-bold flex-shrink-0">
                   4
                 </div>
                 <h3 className="font-semibold">Stay tuned</h3>
@@ -286,7 +418,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Services Section - CHANGED TO ZOOM OUT EFFECT */}
+      {/* Featured Services Section - UPDATED WITH ZOOM IN EFFECT */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -297,164 +429,16 @@ const Home: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {[
-              {
-                title: "Luxury Spa Retreat",
-                description:
-                  "Relax and rejuvenate with our premium spa treatments",
-                goal: "120,000",
-                raised: "8,000",
-                percentage: "7",
-                donations: "14",
-                link: "/services/spa-retreat",
-              },
-              {
-                title: "5-Star Hotel Experience",
-                description:
-                  "Enjoy a luxurious stay with world-class amenities",
-                goal: "150,000",
-                raised: "12,000",
-                percentage: "8",
-                donations: "25",
-                link: "/services/hotel-experience",
-              },
-              {
-                title: "Fine Dining Experience",
-                description:
-                  "Embark on an exciting journey through scenic landscapes",
-                goal: "200,000",
-                raised: "80,000",
-                percentage: "40",
-                donations: "6",
-                link: "/services/dining-experience",
-              },
-            ].map((service, index) => {
-              const [elementRef, isInView] = useInView({ threshold: 0.1 });
-              return (
-                <div
-                  key={index}
-                  ref={elementRef}
-                  className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-1000 transform ${
-                    isInView ? "opacity-100 scale-100" : "opacity-0 scale-125"
-                  }`}
-                  style={{ transitionDelay: `${index * 200}ms` }}
-                >
-                  <div className="h-48 bg-gray-300"></div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-                    <div className="mb-4">
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium">
-                          Goal: ETB {service.goal}
-                        </span>
-                        <span className="text-sm font-medium">
-                          Raised: ETB {service.raised}
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-[#fd7e14] h-2 rounded-full"
-                          style={{ width: `${service.percentage}%` }}
-                        ></div>
-                      </div>
-                      <div className="mt-1 text-sm text-gray-500">
-                        {service.donations} donations
-                      </div>
-                    </div>
-                    <Link
-                      to={service.link}
-                      className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            {firstRowServices.map((service, index) => (
+              <ServiceCard key={index} service={service} index={index} />
+            ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {[
-              {
-                title: "Adventure Tour Package",
-                description:
-                  "Embark on an exciting journey through scenic landscapes",
-                goal: "60,000",
-                raised: "32,000",
-                percentage: "53",
-                donations: "12",
-                link: "/services/adventure-tour",
-              },
-              {
-                title: "Personalized Fitness Package",
-                description:
-                  "Achieve your fitness goals with tailor-made workout plans and personal training sessions.",
-                goal: "220,000",
-                raised: "60,000",
-                percentage: "27",
-                donations: "24",
-                link: "/services/fitness-package",
-              },
-              {
-                title: "Exclusive Event Hosting",
-                description:
-                  "Plan your dream event with our event hosting services. From weddings to corporate meetings, we provide venues, catering, and event management tailored to your needs.",
-                goal: "120,000",
-                raised: "80,000",
-                percentage: "67",
-                donations: "8",
-                link: "/services/event-hosting",
-              },
-            ].map((service, index) => {
-              const [ref, isInView] = useInView({ threshold: 0.1 });
-              return (
-                <div
-                  key={index}
-                  ref={ref}
-                  className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-1000 transform ${
-                    isInView ? "opacity-100 scale-100" : "opacity-0 scale-125"
-                  }`}
-                  style={{ transitionDelay: `${index * 200}ms` }}
-                >
-                  <div className="h-48 bg-gray-300"></div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-                    <div className="mb-4">
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium">
-                          Goal: ETB {service.goal}
-                        </span>
-                        <span className="text-sm font-medium">
-                          Raised: ETB {service.raised}
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-[#fd7e14] h-2 rounded-full"
-                          style={{ width: `${service.percentage}%` }}
-                        ></div>
-                      </div>
-                      <div className="mt-1 text-sm text-gray-500">
-                        {service.donations} donations
-                      </div>
-                    </div>
-                    <Link
-                      to={service.link}
-                      className="block text-center bg-black hover:bg-[#262222] text-white py-2 rounded-md transition duration-300"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            {secondRowServices.map((service, index) => (
+              <ServiceCard key={index} service={service} index={index + 3} />
+            ))}
           </div>
 
           <div className="text-center items-center flex justify-center">
@@ -504,7 +488,7 @@ const Home: React.FC = () => {
             <h2 className="text-3xl font-bold mb-4">More News</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 title: "Latest Charity Event",
@@ -522,17 +506,34 @@ const Home: React.FC = () => {
                   "Placerat volutpat sit sit amet odio sapien volutpat id. Imperdiet pharetra sapien odio dictumst quis mi nunc blandit.",
               },
             ].map((news, index) => {
-              const [ref, isInView] = useInView({ threshold: 0.1 });
+              const [isInView, setIsInView] = useState(false);
+              const ref = useRef(null);
+
+              useEffect(() => {
+                const observer = new IntersectionObserver(
+                  (entries) => {
+                    entries.forEach((entry) => {
+                      setIsInView(entry.isIntersecting);
+                    });
+                  },
+                  { threshold: 0.1 }
+                );
+
+                if (ref.current) {
+                  observer.observe(ref.current);
+                }
+
+                return () => {
+                  if (ref.current) {
+                    observer.unobserve(ref.current);
+                  }
+                };
+              }, []);
               return (
                 <div
                   key={index}
                   ref={ref}
-                  className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-1000 transform ${
-                    isInView
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-10"
-                  }`}
-                  style={{ transitionDelay: `${index * 200}ms` }}
+                  className="bg-white rounded-lg shadow-md overflow-hidden"
                 >
                   <div className="h-48 bg-gray-300"></div>
                   <div className="p-6">
