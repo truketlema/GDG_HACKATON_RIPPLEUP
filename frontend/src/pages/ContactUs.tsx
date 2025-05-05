@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { FiPlus, FiX } from "react-icons/fi";
 
+// Import your assets
+import phone from "../assets/phone.png";
+import email from "../assets/email.png";
+import clock from "../assets/clock.png";
+import facebook from "../assets/Facebook_black.png";
+import x from "../assets/X.png";
+import instagram from "../assets/Instagram_black.png";
+import image from "../assets/Img.png";
+
 // Import header and footer components
 import Header from "../components/Header";
-//import Footer from "../components/Footer";
+import Footer from "../components/Footer";
 
-const ContactPage: React.FC = () => {
+const ContactPage1: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
@@ -76,25 +85,21 @@ const ContactPage: React.FC = () => {
             <div className="space-y-5 text-sm">
               <p className="font-bold">Address: Addis Ababa Ethiopia.</p>
               <div className="flex items-center gap-2">
-                <img src="/assets/phone.png" alt="Phone" className="h-5 w-5" />
+                <img src={phone} alt="Phone" className="h-5 w-5" />
                 <span>(251) 366-7883</span>
               </div>
               <div className="flex items-center gap-2">
-                <img src="/assets/email.png" alt="Email" className="h-5 w-5" />
+                <img src={email} alt="Email" className="h-5 w-5" />
                 <span>RippleUp@email.net</span>
               </div>
               <div className="flex items-center gap-2">
-                <img src="/assets/clock.png" alt="Clock" className="h-5 w-5" />
+                <img src={clock} alt="Clock" className="h-5 w-5" />
                 <span>24 hour service</span>
               </div>
             </div>
 
             <div className="flex gap-3">
-              {[
-                "/assets/Facebook_black.png",
-                "/assets/X.png",
-                "/assets/Instagram_black.png",
-              ].map((icon, i) => (
+              {[facebook, x, instagram].map((icon, i) => (
                 <button
                   key={i}
                   className="bg-white text-black rounded-full w-6 h-6 flex items-center justify-center p-1"
@@ -210,7 +215,7 @@ const ContactPage: React.FC = () => {
 
         {/* Banner Image */}
         <img
-          src="/assets/Img.png"
+          src={image}
           alt="Descriptive Alt Text"
           className="w-[1080px] h-[380px] rounded-[20px] object-cover mt-32 mx-auto"
         />
@@ -268,10 +273,10 @@ const ContactPage: React.FC = () => {
           </div>
         </div>
       </section>
-      {/*       <Footer />
-       */}
+
+      <Footer />
     </>
   );
 };
 
-export default ContactPage;
+export default ContactPage1;
