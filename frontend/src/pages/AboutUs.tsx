@@ -179,7 +179,7 @@ const AboutUsPage: React.FC = () => {
             These extraordinary individuals and organizations have made
             significant contributions to our cause.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-96">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-80">
             {[
               {
                 name: "Brycen Gregory",
@@ -201,7 +201,7 @@ const AboutUsPage: React.FC = () => {
                 key={id}
                 className="bg-white h-full rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
-                <div className="h-full
+                <div className="h-60
                  overflow-hidden">
                   <img
                     src={person.img}
