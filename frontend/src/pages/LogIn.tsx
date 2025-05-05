@@ -2,13 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function LogIn() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your auth logic here
+    // Add auth logic here
 
     // Simulate successful login
     setTimeout(() => {
@@ -22,15 +20,26 @@ export default function LogIn() {
         <h2 className="text-2xl font-bold text-center text-indigo-600 mb-6">Welcome Back</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1" htmlFor="email">
-              Email Address
+            <label className="block text-sm font-medium text-gray-600 mb-1" htmlFor="firstName">
+              First Name
             </label>
             <input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="firstName"
+              type="text"
+              placeholder="John"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1" htmlFor="lastName">
+              Last Name
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              placeholder="Doe"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               required
             />
@@ -44,8 +53,6 @@ export default function LogIn() {
               id="password"
               type="password"
               placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               required
             />
