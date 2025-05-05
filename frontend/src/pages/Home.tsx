@@ -106,6 +106,20 @@ const ServiceCard = ({ service, index }) => {
 };
 
 const Home: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    const storedUserData = localStorage.getItem("userData");
+
+    if (authToken && storedUserData) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   // First row of services
   const firstRowServices = [
     {
@@ -203,12 +217,14 @@ const Home: React.FC = () => {
               </div>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link
-                to="/signup"
-                className="bg-white text-[#3e3b78] hover:bg-blue-100 px-6 py-3 rounded-full font-medium transition duration-300"
-              >
-                Sign Up
-              </Link>
+              {!isLoggedIn && (
+                <Link
+                  to="/signup"
+                  className="bg-white text-[#3e3b78] hover:bg-blue-100 px-6 py-3 rounded-full font-medium transition duration-300"
+                >
+                  Sign Up
+                </Link>
+              )}
               <Link
                 to="/services"
                 className="bg-transparent border-2 border-white hover:bg-white hover:text-[#3e3b78] px-6 py-3 rounded-full font-medium transition duration-300"
@@ -507,46 +523,7 @@ const Home: React.FC = () => {
                   "Placerat volutpat sit sit amet odio sapien volutpat id. Imperdiet pharetra sapien odio dictumst quis mi nunc blandit.",
               },
             ].map((news, index) => {
-              const [isInView, setIsInView] = useState(false);
-              const ref = useRef(null);
-
-              useEffect(() => {
-                const observer = new IntersectionObserver(
-                  (entries) => {
-                    entries.forEach((entry) => {
-                      setIsInView(entry.isIntersecting);
-                    });
-                  },
-                  { threshold: 0.1 }
-                );
-
-                if (ref.current) {
-                  observer.observe(ref.current);
-                }
-
-                return () => {
-                  if (ref.current) {
-                    observer.unobserve(ref.current);
-                  }
-                };
-              }, []);
-              return (
-                <div
-                  key={index}
-                  ref={ref}
-                  className="bg-white rounded-lg shadow-md overflow-hidden"
-                >
-                  <div className="h-48 bg-gray-300"></div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
-                    <p className="text-gray-600 mb-4">{news.description}</p>
-                    <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
-                      READ MORE
-                      <span>→</span>
-                    </button>
-                  </div>
-                </div>
-              );
+              return <NewsCard key={index} news={news} />;
             })}
           </div>
         </div>
@@ -554,6 +531,46 @@ const Home: React.FC = () => {
       <div className="mt-auto">
         {" "}
         <Footer />
+      </div>
+    </div>
+  );
+};
+
+const NewsCard = ({ news }) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="h-48 bg-gray-300"></div>
+      <div className="p-6">
+        <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
+        <p className="text-gray-600 mb-4">{news.description}</p>
+        <button className="text-orange-500 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+          READ MORE
+          <span>→</span>
+        </button>
       </div>
     </div>
   );
